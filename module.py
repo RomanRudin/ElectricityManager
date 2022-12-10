@@ -114,10 +114,7 @@ def resulting(appliance_name, power, time, number, n, l):
 
 def loss_counting(appliance_name, power, time, number, money, n, l):
     power_loss = (2 * (values['p'] ** 2) * values['ro'] * l) / ((values['U'] ** 2) * (values['S'] * 10 ** (-6)) * (fi[appliance_name] ** 2)) * time
-    print(power_loss)
     n_loss = (1 - n) * power * number * time
-    print(power_loss)
-    print((power_loss + n_loss) * money)
     return (power_loss + n_loss) * money
 
 def money_counting(power, time, number, money):
