@@ -1,0 +1,26 @@
+Add cofiguration
+Name of cofiguration
+he name of the new configuration is not specified!
+Configuration for deletion is not selected!
+Configuration for saving is not selected!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

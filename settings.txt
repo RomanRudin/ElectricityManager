@@ -1,0 +1,4 @@
+Cu | 	Material of wires	 	2 symbols long 			(Cu/Al)
+220 | 	Voltage of the circuit	 	3 symbols long 			(220/380)
+0.75 | 	Wires area 			4 symbols including "." 	(0.50/0.75/1.00/1.50/2.00/2.50/4.00/6.00/10.0) 	!!!Attension!!! Alluminium wires can be only starting from 1.50
+3.55 | 	Cost of 1 kilowatt per hour 	4 symbols long including "." 	(Everything you want)s
