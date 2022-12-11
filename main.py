@@ -32,32 +32,32 @@ class Window(QWidget):
 
         #центральная треть
         result_label = QLabel("Результаты вычислений:")
-        result_all_loss = QLabel("")
-        result_all_money = QLabel("")
-        result_logs = QListWidget()
-        result_loss = QLabel("")
-        result_money = QLabel("")
+        self.result_all_loss = QLabel("")
+        self.result_all_money = QLabel("")
+        self.result_logs = QListWidget()
+        self.result_loss = QLabel("")
+        self.result_money = QLabel("")
         appliance_information_label = QLabel('Введите данные. Обязательные для ввода поля помечены *')
         appliance_type_label = QLabel('Выберите тип электроприбора *')
-        appliance_type = QComboBox()
-        appliance_model = QLineEdit()
-        appliance_model.setPlaceholderText('Модель / марка прибора')
-        appliance_number = QLineEdit()
-        appliance_number.setPlaceholderText('Количество приборов *')
-        appliance_power = QLineEdit()
-        appliance_power.setPlaceholderText('Мощность приборов *')
-        appliance_time = QLineEdit()
-        appliance_time.setPlaceholderText('Время работы в сутки *')
+        self.appliance_type = QComboBox()
+        self.appliance_model = QLineEdit()
+        self.appliance_model.setPlaceholderText('Модель / марка прибора')
+        self.appliance_number  = QLineEdit()
+        self.appliance_number.setPlaceholderText('Количество приборов *')
+        self.appliance_power = QLineEdit()
+        self.appliance_power.setPlaceholderText('Мощность приборов *')
+        self.appliance_time = QLineEdit()
+        self.appliance_time.setPlaceholderText('Время работы в сутки *')
         appliance_time_label = QLabel('Выберите указанную единицу измерения *')
-        appliance_time_flag = QComboBox()
+        self.appliance_time_flag = QComboBox()
 
-        appliance_time_flag.addItem('Часы')
-        appliance_time_flag.addItem('Минуты')
-        appliance_time_flag.addItem('Секунды')
-        appliance_time_flag.activated[str].connect(self.appliance_time_flag_function)
+        self.appliance_time_flag.addItem('Часы')
+        self.appliance_time_flag.addItem('Минуты')
+        self.appliance_time_flag.addItem('Секунды')
+        self.appliance_time_flag.activated[str].connect(self.appliance_time_flag_function)
 
-        appliance_efficiency = QLineEdit()
-        appliance_efficiency.setPlaceholderText('КПД прибора')
+        self.appliance_efficiency = QLineEdit()
+        self.appliance_efficiency.setPlaceholderText('КПД прибора')
         appliance_save = QPushButton('Сохранить')
 
         self.information_logs = QListWidget()
@@ -65,7 +65,7 @@ class Window(QWidget):
 
         #правая треть
         appliance_list_label = QLabel('Выберите электроприбор:')
-        appliance_list = QListWidget()
+        self.appliance_list = QListWidget()
 
         appliance_delete = QPushButton('Удалить')
 
@@ -80,21 +80,21 @@ class Window(QWidget):
         #Лэйауты
         main_layout = QHBoxLayout()
         layout_first = QVBoxLayout()
-        layout_second = QVBoxLayout()
+        self.layout_second = QVBoxLayout()
         layout_third = QVBoxLayout()
         layout_c_buttons = QVBoxLayout()
         layout_c_buttons1 = QHBoxLayout()
         layout_a_buttons = QVBoxLayout()
         layout_device = QVBoxLayout()
         layout_add_appliance = QHBoxLayout()
-        layout_result = QVBoxLayout() #? dynamic layout
-        layout_result_selected = QHBoxLayout() #? dynamic layout
+        self.layout_result = QVBoxLayout() #? dynamic layout
+        self.layout_result_selected = QHBoxLayout() #? dynamic layout
 
-        layout_result_selected.addWidget(result_money)
-        layout_result_selected.addWidget(result_loss)
+        self.layout_result_selected.addWidget(self.result_money)
+        self.layout_result_selected.addWidget(self.result_loss)
 
-        layout_result.addWidget(result_all_money)
-        layout_result.addWidget(result_all_loss)
+        self.layout_result.addWidget(self.result_all_money)
+        self.layout_result.addWidget(self.result_all_loss)
 
         layout_add_appliance.addWidget(appliance_add_box)
 
@@ -105,14 +105,14 @@ class Window(QWidget):
 
         layout_device.addWidget(appliance_information_label, stretch=1)
         layout_device.addWidget(appliance_type_label, stretch=1)
-        layout_device.addWidget(appliance_type, stretch=2)
-        layout_device.addWidget(appliance_model, stretch=1)
-        layout_device.addWidget(appliance_number, stretch=1)
-        layout_device.addWidget(appliance_power, stretch=1)
-        layout_device.addWidget(appliance_time, stretch=1)
+        layout_device.addWidget(self.appliance_type, stretch=1)
+        layout_device.addWidget(self.appliance_model, stretch=1)
+        layout_device.addWidget(self.appliance_number, stretch=1)
+        layout_device.addWidget(self.appliance_power, stretch=1)
+        layout_device.addWidget(self.appliance_time, stretch=1)
         layout_device.addWidget(appliance_time_label, stretch=1)
-        layout_device.addWidget(appliance_time_flag, stretch=1)
-        layout_device.addWidget(appliance_efficiency, stretch=1)
+        layout_device.addWidget(self.appliance_time_flag, stretch=1)
+        layout_device.addWidget(self.appliance_efficiency, stretch=1)
         layout_device.addWidget(appliance_save, stretch=1)
 
         layout_a_buttons.addWidget(appliance_delete)
@@ -122,26 +122,27 @@ class Window(QWidget):
         layout_first.addWidget(self.configurations_list, stretch=32)
         layout_first.addLayout(layout_c_buttons, stretch=24)
 
-        layout_second.addWidget(result_label, stretch=1)
-        layout_second.addWidget(result_logs, stretch=1)
-        layout_second.addLayout(layout_device, stretch=3)
-        layout_second.addWidget(self.information_logs, stretch=1)
+        
+        self.layout_second.addWidget(result_label, stretch=1)
+        self.layout_second.addWidget(self.result_logs, stretch=1)
+        self.layout_second.addLayout(layout_device, stretch=3)
+        self.layout_second.addWidget(self.information_logs, stretch=1)
 
         layout_third.addWidget(appliance_list_label, stretch=1)
-        layout_third.addWidget(appliance_list, stretch=15)
+        layout_third.addWidget(self.appliance_list, stretch=15)
 
         layout_third.addLayout(layout_a_buttons, stretch=5)
 
         main_layout.addLayout(layout_first, stretch=4)
-        main_layout.addLayout(layout_second, stretch=7)
+        main_layout.addLayout(self.layout_second, stretch=7)
         main_layout.addLayout(layout_third, stretch=5)
 
         #Обработка событий
         self.configurations_list.itemClicked.connect(self.show_third)
         configurations_create.clicked.connect(self.create_configuration)
         configurations_delete.clicked.connect(self.delete_configuration)
-        appliance_list.itemClicked.connect(self.show_second_list)
-        result_logs.itemClicked.connect(self.show_results)
+        self.appliance_list.itemClicked.connect(self.show_second_list)
+        self.result_logs.itemClicked.connect(self.show_results)
         appliance_delete.clicked.connect(self.delete_appliance)
         appliance_save.clicked.connect(self.save_appliance)
 
