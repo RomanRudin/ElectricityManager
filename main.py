@@ -337,6 +337,9 @@ if __name__ == '__main__':
 
     with open('D:\Учёба\Проект\data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
+    with open('main.qss', 'r') as file:
+        qss = file.read()
+    main.setStyleSheet(qss.QWindow)
     main.configurations_list.addItems(data)
     app.exec_()
 
