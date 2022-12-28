@@ -1,8 +1,7 @@
-from pickle import ADDITEMS
-from re import L
 from tabnanny import check
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QTextEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QFormLayout, QRadioButton, QComboBox, QCheckBox
+from sys import argv, exit
 import time
 import json
 import os
@@ -317,7 +316,7 @@ if __name__ == '__main__':
     lang.choose_lang(0)
     start()
     #Виджеты
-    app = QApplication([])
+    app = QApplication([argv])
 
     main = Window()
     main.setWindowTitle('')
@@ -339,10 +338,7 @@ if __name__ == '__main__':
         data = json.load(file)
     with open('main.qss', 'r') as file:
         qss = file.read()
-    main.setStyleSheet(qss.QWindow)
+    app.setStyleSheet(qss)
     main.configurations_list.addItems(data)
-    app.exec_()
 
-
-    #setsize()
-    #resize()
+    exit(app.exec_())
