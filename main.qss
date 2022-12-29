@@ -1,0 +1,83 @@
+QWidget {
+    font: 12pt normal;
+    font-weight: normal;
+    color: rgba(255, 242, 72, 0.6);
+    border-radius: 10px;
+    background-color: rgba(30, 30, 30, 0.28);
+}
+
+QLabel#result_info{
+    color: rgba(255, 242, 72, 1);
+}
+QLabel#appliance_information_label{
+    font-size: 15pt;
+    color: "orange";
+}
+QLabel#spacer{
+    background-color: #1e1e1e;
+}
+
+
+
+QListWidget {
+    border: 2px solid gray;
+}
+
+QListWidget#information_logs {
+
+}
+
+QListWidget#result_logs {
+
+}
+
+
+
+QComboBox {
+    border: 2px solid gray;
+    padding: 1px 18px 1px 3px;
+}
+QComboBox:on {
+    color: "blue"
+}
+QComboBox:drop-down {
+    color: "yellow"
+}
+
+
+QPushButton {
+    border: 2px "black";
+    background-color: rgba(66, 66, 66, 0.62)
+}
+QPushButton#configurations_buttons {
+    
+}
+QPushButton#configurations_buttons:pressed {
+    
+}
+
+QPushButton#appliance_save {
+    
+}
+QPushButton#appliance_save:pressed {
+    
+}
+
+QPushButton#appliance_delete {
+    
+}
+QPushButton#appliance_delete:pressed {
+    
+}
+
+
+
+QLineEdit#appliance_args {
+    color: rgba(255, 242, 72, 1);
+}
+
+
+
+QDialog QPushButton {
+    
+}
