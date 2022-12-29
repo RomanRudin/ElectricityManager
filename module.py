@@ -103,7 +103,7 @@ def start():
         with open('settings.txt', 'r', encoding='utf-8') as settings:
             global values
             Material, U, S = settings.readline()[:2], int(settings.readline()[:3]), float(settings.readline()[:4])
-            values = {'p': standart_values['P'][Material][U][S], 'U': U, 'S': S, 'ro': standart_values['ro'][Material], 'Money': float(settings.readline()[:4]) * 3600 / 1000}
+            values = {'p': standart_values['P'][Material][U][S], 'U': U, 'S': S, 'ro': standart_values['ro'][Material], 'Money': float(settings.readline()[:4]) / (3600 * 1000)}
             #Because parameter "money" counts in rilowatts per hour I need / 1_000 * 3600
     except FileNotFoundError:
         pass
@@ -119,5 +119,3 @@ def loss_counting(appliance_name, power, time, number, money, n, l):
 
 def money_counting(power, time, number, money):
     return (power * time * money * number)
-
-

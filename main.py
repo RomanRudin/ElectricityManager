@@ -1,6 +1,6 @@
 from tabnanny import check
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QTextEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QFormLayout, QRadioButton, QComboBox, QCheckBox
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QComboBox, QSizePolicy
 from sys import argv, exit
 import time
 import json
@@ -23,22 +23,35 @@ class Window(QWidget):
         super().__init__()
         #левая треть
         configurations_list_label = QLabel('Выберите конфигурацию из уже существующих или добавьте новую:')
+        configurations_list_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.configurations_list = QListWidget()
+        self.configurations_list.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         configurations_create = QPushButton('Создать')
+        configurations_create.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         configurations_delete = QPushButton('Удалить')
+        configurations_delete.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
 
         #центральная треть
         result_label = QLabel("Результаты вычислений:")
+        result_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.result_all_loss = QLabel("")
         self.result_all_money = QLabel("")
+        self.result_all_loss.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.result_all_money.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.result_logs = QListWidget()
+        self.result_logs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.result_loss = QLabel("")
         self.result_money = QLabel("")
+        self.result_loss.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.result_money.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         appliance_information_label = QLabel('Введите данные. Обязательные для ввода поля помечены *')
         appliance_type_label = QLabel('Выберите тип электроприбора *')
+        appliance_information_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        appliance_type_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_type = QComboBox()
+        self.appliance_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_model = QLineEdit()
         self.appliance_model.setPlaceholderText('Модель / марка прибора')
         self.appliance_number  = QLineEdit()
@@ -47,8 +60,14 @@ class Window(QWidget):
         self.appliance_power.setPlaceholderText('Мощность приборов *')
         self.appliance_time = QLineEdit()
         self.appliance_time.setPlaceholderText('Время работы в сутки *')
+        self.appliance_model.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.appliance_number.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.appliance_power.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.appliance_time.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         appliance_time_label = QLabel('Выберите указанную единицу измерения *')
+        appliance_time_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_time_flag = QComboBox()
+        self.appliance_time_flag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.appliance_time_flag.addItem('Часы')
         self.appliance_time_flag.addItem('Минуты')
@@ -57,24 +76,30 @@ class Window(QWidget):
 
         self.appliance_efficiency = QLineEdit()
         self.appliance_efficiency.setPlaceholderText('КПД прибора')
+        self.appliance_efficiency.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         appliance_save = QPushButton('Сохранить')
+        appliance_save.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.information_logs = QListWidget()
+        self.information_logs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
 
         #правая треть
         appliance_list_label = QLabel('Выберите электроприбор:')
+        appliance_list_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_list = QListWidget()
+        self.appliance_list.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         appliance_delete = QPushButton('Удалить')
+        appliance_delete.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         appliance_add_box = QComboBox()
+        appliance_add_box.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         appliance_add_box.addItem('')
         for key in appliance:
             appliance_add_box.addItem(str(key))
         appliance_add_box.activated[str].connect(self.add_appliance)   
-
-
+        
 
         #Лэйауты
         main_layout = QHBoxLayout()
