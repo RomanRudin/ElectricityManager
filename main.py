@@ -24,10 +24,8 @@ class Window(QWidget):
         #левая треть
         configurations_list_label = QLabel('Выберите конфигурацию из уже существующих или добавьте новую:')
         configurations_list_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        configurations_list_label.setObjectName('configurations_list_label')
         self.configurations_list = QListWidget()
         self.configurations_list.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.configurations_list.setObjectName('configurations_list')
 
         configurations_create = QPushButton('Создать')
         configurations_delete = QPushButton('Удалить')
@@ -40,13 +38,12 @@ class Window(QWidget):
         #центральная треть
         result_label = QLabel("Результаты вычислений:")
         result_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        result_label.setObjectName('result_label')
         self.result_all_loss = QLabel("")
         self.result_all_money = QLabel("")
         self.result_all_loss.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.result_all_money.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.result_all_loss.setObjectName('result_all_info')
-        self.result_all_money.setObjectName('result_all_info')
+        self.result_all_loss.setObjectName('result_info')
+        self.result_all_money.setObjectName('result_info')
         self.result_logs = QListWidget()
         self.result_logs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.result_logs.setObjectName('result_logs')
@@ -61,10 +58,8 @@ class Window(QWidget):
         appliance_information_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         appliance_type_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         appliance_information_label.setObjectName('appliance_information_label')
-        appliance_type_label.setObjectName('appliance_type_label')
         self.appliance_type = QComboBox()
         self.appliance_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.configurations_list.setObjectName('configurations_list')
         self.appliance_model = QLineEdit()
         self.appliance_model.setPlaceholderText('Модель / марка прибора')
         self.appliance_number  = QLineEdit()
@@ -87,10 +82,8 @@ class Window(QWidget):
         self.appliance_efficiency.setObjectName('appliance_args')
         appliance_time_label = QLabel('Выберите указанную единицу измерения *')
         appliance_time_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        appliance_time_label.setObjectName('appliance_time_label')
         self.appliance_time_flag = QComboBox()
         self.appliance_time_flag.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.appliance_time_flag.setObjectName('appliance_time_flag')
 
         self.appliance_time_flag.addItem('Часы')
         self.appliance_time_flag.addItem('Минуты')
@@ -103,13 +96,12 @@ class Window(QWidget):
 
         self.information_logs = QListWidget()
         self.information_logs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.configurations_list.setObjectName('configurations_list')
+        appliance_save.setObjectName('information_logs')
 
 
         #правая треть
         appliance_list_label = QLabel('Выберите электроприбор:')
         appliance_list_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.configurations_list.setObjectName('configurations_list')
         self.appliance_list = QListWidget()
         self.appliance_list.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_list.setObjectName('self.appliance_list')
@@ -126,14 +118,16 @@ class Window(QWidget):
             appliance_add_box.addItem(str(key))
         appliance_add_box.activated[str].connect(self.add_appliance)   
 
+        spacer = QLabel()
+        spacer.setObjectName('spacer')
+
 
         #Лэйауты
         main_layout = QHBoxLayout()
         layout_first = QVBoxLayout()
         self.layout_second = QVBoxLayout()
         layout_third = QVBoxLayout()
-        layout_c_buttons = QVBoxLayout()
-        layout_c_buttons1 = QHBoxLayout()
+        layout_c_buttons = QHBoxLayout()
         layout_a_buttons = QVBoxLayout()
         layout_device = QVBoxLayout()
         layout_add_appliance = QHBoxLayout()
@@ -148,10 +142,8 @@ class Window(QWidget):
 
         layout_add_appliance.addWidget(appliance_add_box)
 
-        layout_c_buttons1.addWidget(configurations_create)
-        layout_c_buttons1.addWidget(configurations_delete)
-
-        layout_c_buttons.addLayout(layout_c_buttons1)
+        layout_c_buttons.addWidget(configurations_create)
+        layout_c_buttons.addWidget(configurations_delete)
 
         layout_device.addWidget(appliance_information_label, stretch=1)
         layout_device.addWidget(appliance_type_label, stretch=1)
@@ -168,24 +160,24 @@ class Window(QWidget):
         layout_a_buttons.addWidget(appliance_delete)
         layout_a_buttons.addLayout(layout_add_appliance)
 
-        layout_first.addWidget(configurations_list_label, stretch=1) #изменить
-        layout_first.addWidget(self.configurations_list, stretch=32)
-        layout_first.addLayout(layout_c_buttons, stretch=24)
+        layout_first.addWidget(configurations_list_label, stretch=2) #изменить
+        layout_first.addWidget(self.configurations_list, stretch=64)
+        layout_first.addLayout(layout_c_buttons, stretch=5)
 
         
-        self.layout_second.addWidget(result_label, stretch=1)
-        self.layout_second.addWidget(self.result_logs, stretch=1)
-        self.layout_second.addLayout(layout_device, stretch=3)
-        self.layout_second.addWidget(self.information_logs, stretch=1)
+        self.layout_second.addWidget(result_label, stretch=2)
+        self.layout_second.addWidget(self.result_logs, stretch=2)
+        self.layout_second.addWidget(spacer, stretch=2)
+        self.layout_second.addLayout(layout_device, stretch=8)
+        self.layout_second.addWidget(self.information_logs, stretch=4)
 
         layout_third.addWidget(appliance_list_label, stretch=1)
-        layout_third.addWidget(self.appliance_list, stretch=15)
-
+        layout_third.addWidget(self.appliance_list, stretch=64)
         layout_third.addLayout(layout_a_buttons, stretch=5)
 
-        main_layout.addLayout(layout_first, stretch=4)
+        main_layout.addLayout(layout_first, stretch=2)
         main_layout.addLayout(self.layout_second, stretch=7)
-        main_layout.addLayout(layout_third, stretch=5)
+        main_layout.addLayout(layout_third, stretch=3)
 
         #Обработка событий
         self.configurations_list.itemClicked.connect(self.show_third)
