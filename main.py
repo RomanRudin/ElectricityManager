@@ -1,10 +1,7 @@
-from tabnanny import check
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QComboBox, QSizePolicy
 from sys import argv, exit
 import time
 import json
-import os
 from module import resulting, appliance, start
 import localization as lang
 #from module import method
@@ -13,8 +10,7 @@ d = 1
 results_shown = False
 
 data = {
-    'test_configuration' : {
-    }
+
 }
 
 
@@ -199,16 +195,19 @@ class Window(QWidget):
 
 
     def writing(self):
-        with open('data.json', 'a', encoding='utf-8') as file:
+        with open('data.json', 'w', encoding='utf-8') as file:
             json.dump(data, file, sort_keys=True, ensure_ascii=False)
 
     def message(self, message):
         self.information_logs.addItem(f"[{str(time.ctime(time.time()))}]:       {message}")
 
     def show_third(self):
-        name = self.configurations_list.selectedItems()[0].text()
+        key = self.configurations_list.selectedItems()[0].text()
         self.appliance_list.clear()
-        self.appliance_list.addItems(data[name])
+        self.appliance_list.addItems(data[key])
+        self.result_logs.clear()
+        for item in data[key]:
+            self.result_logs.addItem(item)
 
     def show_second_list(self):
         self.show_second(name=self.appliance_list.selectedItems()[0].text())
@@ -254,7 +253,7 @@ class Window(QWidget):
         configuration_name, ok = QInputDialog.getText(main, lang.add_cofiguration, lang.name_of_cofiguration)
         if ok and configuration_name != '':
             self.hide_results()
-            data[configuration_name] = {}
+            data.update({configuration_name: {}})
             self.configurations_list.addItem(configuration_name)
             self.writing()
         else:
@@ -292,8 +291,12 @@ class Window(QWidget):
     def result(self, number, power, time, n=0, l=0):
         key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()
         if key[0] != 0:
-            self.result_logs.addItem(key1)
-            data[key][key1]['result'] = resulting(key1, power, time, number, n, l)
+                self.result_logs.clear()
+                data[key][key1]['result'] = resulting(key1, power, time, number, n, l)
+                for item in data[key]:
+                    self.result_logs.addItem(item)
+                self.writing()
+
 
     def delete_appliance(self):
         if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():
@@ -384,11 +387,11 @@ if __name__ == '__main__':
     #Запуск
     main.show()
 
-    with open('D:\Учёба\Проект\data.json', 'r', encoding='utf-8') as file:
+    with open('data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
+    main.configurations_list.addItems(data)
     with open('main.qss', 'r') as file:
         qss = file.read()
     app.setStyleSheet(qss)
-    main.configurations_list.addItems(data)
 
     exit(app.exec_())
