@@ -9,9 +9,7 @@ import localization as lang
 d = 1
 results_shown = False
 
-data = {
-
-}
+data = {}
 
 
 class Window(QWidget):

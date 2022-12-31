@@ -24,11 +24,11 @@ QListWidget {
 }
 
 QListWidget#information_logs {
-
+    border: 2px solid green;
 }
 
 QListWidget#result_logs {
-
+    border: 2px solid green;
 }
 
 
@@ -46,9 +46,17 @@ QComboBox:drop-down {
 
 
 QPushButton {
-    border: 2px "black";
+    border: 20px "black";
     background-color: rgba(66, 66, 66, 0.62)
 }
+QPushButton:hover {
+    border: 20px "white";
+    background-color: rgba(132, 132, 132, 0.8)
+}
+QPushButton:pressed {
+    background-color: rgba(66, 66, 66, 0.2)
+}
+
 QPushButton#configurations_buttons {
     
 }
