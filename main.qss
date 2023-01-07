@@ -24,7 +24,7 @@ QListWidget {
 }
 
 QListWidget#information_logs {
-    border: 2px solid green;
+    border: 2px solid blue;
 }
 
 QListWidget#result_logs {
