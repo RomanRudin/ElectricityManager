@@ -1,14 +1,12 @@
+#Импортирование Библиотек
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QComboBox, QSizePolicy
 from sys import argv, exit
 import time
 import json
 import localization as lang
-#from module import method
 
 results_shown = False
-
 data = {}
-
 
 class Window(QWidget): #Класс, объекты которого являются самим приложением. Является дочерним классом QWidget
     def __init__(self): #Конструктор класса
