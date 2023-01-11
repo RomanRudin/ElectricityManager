@@ -380,13 +380,10 @@ class Window(QWidget): #Класс, объекты которого являют
     #Контроль приборов
     def add_appliance(self, text):
         try:                                                                                                                                    #Попробовать выполнить дальнейший код:
-            if text not in data[self.configurations_list.selectedItems()[0].text()]:                                                            #Если в словаре data под ключом из выбранного элемента configurations_list не содержится text:
-                if text != '':                                                                                                                  #Если text не является пустой строкой:
-                    self.appliance_list.addItem(text)                                                                                           #Добавление в appliance_list элемента text
-                    data[self.configurations_list.selectedItems()[0].text()][str(text)] = {'data': [0, 0, 0, 0, '', ['', 0]], 'result': [0, 0]} #Создание новой пустой формы для типа электроприборов
-                    self.writing()                                                                                                              #Сохранение изменений
-            else:                                                                                                                               #Иначе:
-                self.message(lang.device_already_on_list)                                                                                       #Вывод сообщения "Электроприбор уже есть в списке приборов"
+            if text != '':                                                                                                                  #Если text не является пустой строкой:
+                self.appliance_list.addItem(text)                                                                                           #Добавление в appliance_list элемента text
+                data[self.configurations_list.selectedItems()[0].text()][str(text)] = {'data': [0, 0, 0, 0, '', ['', 0]], 'result': [0, 0]} #Создание новой пустой формы для типа электроприборов
+                self.writing()                                                                                                              #Сохранение изменений
         except IndexError:                                                                                                                      #Если возникла ошибка превышения индекса списка:
             self.message(lang.configuration_unselected)                                                                                         #Вывод сообщения "Конфигурация не выбрана"
 
