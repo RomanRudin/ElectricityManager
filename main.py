@@ -471,8 +471,8 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
 if __name__ == '__main__':                                  #Если данный файл является главным (а не дополнительной библиотекой):
-    lang.choose_lang(0)                                     #TODO
-    start()                                                 #TODO
+    #lang.choose_lang(0)                                     #TODO
+    #start()                                                 #TODO
     app = QApplication([argv])                              #Создание объекта app - экземпляра класса управления логикой графики компьютера QApplication
 
     main = Window()                                         #Создание объекта main - экземпляра класса Window
