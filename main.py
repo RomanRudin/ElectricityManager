@@ -378,28 +378,28 @@ class Window(QWidget): #Класс, объекты которого являют
 
     #Контроль приборов
     def add_appliance(self, text):
-        try:                                                                                                                                    #Попробовать выполнить дальнейший код:
+        try:                                                                                                                                #Попробовать выполнить дальнейший код:
             if text != '':                                                                                                                  #Если text не является пустой строкой:
                 self.appliance_list.addItem(text)                                                                                           #Добавление в appliance_list элемента text
                 data[self.configurations_list.selectedItems()[0].text()][str(text)] = {'data': [0, 0, 0, 0, '', ['', 0]], 'result': [0, 0]} #Создание новой пустой формы для типа электроприборов
                 self.writing()                                                                                                              #Сохранение изменений
-        except IndexError:                                                                                                                      #Если возникла ошибка превышения индекса списка:
-            self.message(lang.configuration_unselected)                                                                                         #Вывод сообщения "Конфигурация не выбрана"
+        except IndexError:                                                                                                                  #Если возникла ошибка превышения индекса списка:
+            self.message(lang.configuration_unselected)                                                                                     #Вывод сообщения "Конфигурация не выбрана"
 
     def save_appliance(self):
-        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                                        #Если какие-либо конфигурация и электроприбор выделены:
-            if self.float_checking() and self.must_have_checker():                                                                                  #Если данные из центрального сектора прошли проверку на тип и достаточность:
-                key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()                       #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
-                number, power, time = self.must_have_checker()                                                                                      #Запись преобразованных в тип float и возвращённых методом must_have_checker данных
-                if self.appliance_efficiency.text() != '':                                                                                          #Если поле КПД заполнено:
-                    n = float(self.appliance_efficiency.text()) / 100                                                                               #Запись преобразованного в тип float КПД
-                    data[key][key1]['data'] = [int(number), float(power), float(time), n, self.appliance_model.text(), data[key][key1]['data'][5]]  #Запись введённых данных в созданную форму
-                    self.result(number, power, time * self.d, n)                                                                                    #Вызов метода расчёта потерь с приведёнными данными
-                else:                                                                                                                               #Иначе:
-                    data[key][key1]['data'] = [int(number), float(power), float(time), '', self.appliance_model.text(), data[key][key1]['data'][5]] #Запись введённых данных в созданную форму
-                    self.result(number, power, time * self.d)                                                                                       #Вызов метода расчёта потерь с приведёнными данными
-        else:                                                                                                                                       #Иначе:
-            self.message(lang.configuration_unselected_saving)                                                                                      #Вывод сообщения "Конфигурация или прибор не выбраны"
+        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                                    #Если какие-либо конфигурация и электроприбор выделены:
+            if self.float_checking() and self.must_have_checker():                                                                              #Если данные из центрального сектора прошли проверку на тип и достаточность:
+                key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()                   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
+                number, power, time = self.must_have_checker()                                                                                  #Запись преобразованных в тип float и возвращённых методом must_have_checker данных
+                self.appliance_type_function()                                                                                                  #Вызов функции сохранения типа электроприбора
+                if self.appliance_efficiency.text() != '':                                                                                      #Если поле КПД заполнено:
+                    n = float(self.appliance_efficiency.text()) / 100                                                                           #Запись преобразованного в тип float КПД
+                else:                                                                                                                           #Иначе:
+                    n = data[key][key1]['data'][5][1]                                                                                           #Запись стандартного для этого типа КПД
+                data[key][key1]['data'] = [int(number), float(power), float(time), n, self.appliance_model.text(), data[key][key1]['data'][5]]  #Запись введённых данных в созданную форму
+                self.result(number, power, time * self.d, n)                                                                                    #Вызов метода расчёта потерь с приведёнными данными
+        else:                                                                                                                                   #Иначе:
+            self.message(lang.configuration_unselected_saving)                                                                                  #Вывод сообщения "Конфигурация или прибор не выбраны"
 
     def delete_appliance(self):
         if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                #Если какие-либо конфигурация и электроприбор выделены:
@@ -414,11 +414,8 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Результат
-    def result(self, number, power, time, n=0, l=1):
+    def result(self, number, power, time, n, l=1):
         key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
-        type_of_appliance = data[key][key1]['data'][5][1]
-        if n == 0:
-            n = appliance[key1][type_of_appliance]
         if key[0] != 0:                                                                                                 #Если первый элемент key не равен нулю, т.е. был изменён пользователем:
             self.result_logs.clear()                                                                                    #Очистка result_logs
             data[key][key1]['result'] = resulting(key1, power, time, number, n, l)                                      #Запись данных, полученных а результате вычислений в data (а точнее в список-форму под ключом result словаря под ключом key1 под ключом key словаря data)
@@ -428,7 +425,8 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Упрощающие жизнь методы
-    def appliance_type_function(self, text):
+    def appliance_type_function(self):
+        text = self.appliance_type.currentText()                                                              #Запись выбранного типа электроприбор в переменную text
         key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
         data[key][key1]['data'][5] = [str(text), appliance[self.appliance_list.selectedItems()[0].text()][text]]        #Запись текста свойства прибора и данных КПД из словаря appliance для этого свойства в data
 
