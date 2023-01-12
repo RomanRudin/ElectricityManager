@@ -471,9 +471,15 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
 if __name__ == '__main__':                                  #Если данный файл является главным (а не дополнительной библиотекой):
-    #lang.choose_lang(0)                                     #TODO
-    #start()                                                 #TODO
     app = QApplication([argv])                              #Создание объекта app - экземпляра класса управления логикой графики компьютера QApplication
+
+    try:                                                    #Попробовать выполнить код:
+        from module import resulting, appliance, start      #Из библиотеки module импортировать resulting, start, appliance
+    except ImportError:                                     #Если произошла ошибка импортирования (ошибка подключения библиотеки):
+        print('Файлы программы повреждены (module.py не найден). Обратитесь к разработчику.') #Вывод сообщения
+
+    #lang.choose_lang(0)                                     #TODO
+    start()                                                 #TODO
 
     main = Window()                                         #Создание объекта main - экземпляра класса Window
     main.setWindowTitle('')                                 #Установка названия приложения
@@ -482,10 +488,6 @@ if __name__ == '__main__':                                  #Если данны
 
     main.message('Старт программы')                         #Вывод сообщения "Старт программы"
 
-    try:                                                    #Попробовать выполнить код:
-        from module import resulting, appliance, start      #Из библиотеки module импортировать resulting, start, appliance
-    except ImportError:                                     #Если произошла ошибка импортирования (ошибка подключения библиотеки):
-        main.message('Файлы программы повреждены (module.py не найден). Обратитесь к разработчику.') #Вывод сообщения
 
     with open('data.json', 'r', encoding='utf-8') as file:  #Открытие файла data.json для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
         data = json.load(file)                              #Запись данных из file в словарь data 

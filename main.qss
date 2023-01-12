@@ -21,6 +21,7 @@ QLabel#spacer{
 
 QListWidget {
     border: 2px solid gray;
+    color: rgba(255, 254, 202, 0.9);
 }
 
 QListWidget#information_logs {
