@@ -1,66 +1,64 @@
-
-from optparse import Values
-
-
+#Словарь средних КПД для различных типов различных приборов
 appliance = {
     'Чайник' : {
-        'Стеклянный' : 0,
-        'Пластмассовый' : 0,
-        'Стальной' : 0
+        'Стеклянный' : 0.9,
+        'Пластмассовый' : 0.95,
+        'Стальной' : 0.8
     },
     'Лампочка' : {
-        'Лампа накаливания' : 0,
-        'Энергосберегающая лампа' : 0,
-        'Светодиодная лампа' : 0
+        'Лампа накаливания' : 0.1,
+        'Энергосберегающая лампа' : 0.9,
+        'Светодиодная лампа' : 0.95
     },
     'Компьютер' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Телевизор' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Зарядка' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Принтер' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Холодильник' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Микроволновая печь' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Духовая печь' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Индукционная плита' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Утюг' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Стиральная машина' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Сушильная машина' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Вентмашина' : {
-        'Любая' : 0
+        'Любая' : 0.95
     },
     'Обогреватель' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Электрический котёл' : {
-        'Любой' : 0
+        'Любой' : 0.95
     },
     'Пылесос' : {
-        'Подключаемый' : 0,
-        'Заряжаемый' : 0
+        'Подключаемый' : 0.95,
+        'Заряжаемый' : 0.9
     }
 }
 
+#Словарь стандартных значений коэффициента φ (фи) для различных электроприборов
 fi = {
     'Чайник' : 1,
     'Лампочка' : 0.95,
@@ -81,9 +79,7 @@ fi = {
     'Пылесос' : 0.9
 }
 
-#To understand, what's happening here, you must be drunk (but if it's 5 a.m. - than it' it's just optional) an
-# you must have links/standart_values.jpg opened on the second screen
-
+#Словарь стандартных значений для различных проводов
 standart_values = {'P': {'Cu': {220: {0.50: 1300, 0.75: 2200, 1.00: 3100, 1.50: 3300, 2.00: 4200, 
                                       2.50: 4600, 4.00: 5900, 6.00: 7500, 10.0: 11000}, 
                                 380: {0.50: 2300, 0.75: 3800, 1.00: 5300, 1.50: 5700, 2.00: 7200, 
@@ -96,26 +92,32 @@ standart_values = {'P': {'Cu': {220: {0.50: 1300, 0.75: 2200, 1.00: 3100, 1.50: 
                    'ro': {'Cu': 1.68 * 10 ** (- 8),
                           'Al': 2.7 * 10 ** (-8)}}
 
+#Заполняемый в процессе вычислений список данных
 values = []
 
+#
 def start():
     try:
-        with open('settings.txt', 'r', encoding='utf-8') as settings:
-            global values
-            Material, U, S = settings.readline()[:2], int(settings.readline()[:3]), float(settings.readline()[:4])
-            values = {'p': standart_values['P'][Material][U][S], 'U': U, 'S': S, 'ro': standart_values['ro'][Material], 'Money': float(settings.readline()[:4]) / (3600 * 1000)}
-            #Because parameter "money" counts in rilowatts per hour I need / 1_000 * 3600
-    except FileNotFoundError:
-        pass
+        with open('settings.txt', 'r', encoding='utf-8') as settings:                                                                                                               #Открытие файла settings.txt для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться settings
+            global values                                                                                                                                                           #Далее будет исползоваться глобальная переменная values
+            Material, U, S = settings.readline()[:2], int(settings.readline()[:3]), float(settings.readline()[:4])                                                                  #Парсинг () данных из фалйа в переменные
+            values = {'p': standart_values['P'][Material][U][S], 'U': U, 'S': S, 'ro': standart_values['ro'][Material], 'Money': float(settings.readline()[:4]) / (3600 * 1000)}    #
+            #Мне необходимы действия / 1_000 * 3600, так как параметр "money" считается по киловатт-часам          
+    except FileNotFoundError:                                                                                                                                                       #
+        pass                                                                                                                                                                        #
 
-
+#Функция, собирающая результаты вычислений других функций воедино
 def resulting(appliance_name, power, time, number, n, l):
-    return [loss_counting(appliance_name, power, time, number, values['Money'], n, l), money_counting(power, time, number, values['Money'])]
+    print(round(loss_counting(appliance_name, power, time, number, values['Money'], n, l), 2), round(money_counting(power, time, number, values['Money']), 2))
+    return [round(loss_counting(appliance_name, power, time, number, values['Money'], n, l), 2), round(money_counting(power, time, number, values['Money']), 2)]
 
+#Функция, вычисляющая 
 def loss_counting(appliance_name, power, time, number, money, n, l):
     power_loss = (2 * (values['p'] ** 2) * values['ro'] * l) / ((values['U'] ** 2) * (values['S'] * 10 ** (-6)) * (fi[appliance_name] ** 2)) * time
     n_loss = (1 - n) * power * number * time
     return (power_loss + n_loss) * money
 
+#Функция, возвращающая потери в денежном эквиваленте
 def money_counting(power, time, number, money):
+    print(power, time, number, money)
     return (power * time * money * number)
