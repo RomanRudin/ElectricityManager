@@ -87,7 +87,7 @@ class Window(QWidget): #Класс, объекты которого являют
         self.appliance_number.setPlaceholderText('Количество приборов *')
         self.appliance_power.setPlaceholderText('Мощность приборов *')
         self.appliance_time.setPlaceholderText('Время работы в сутки *')
-        self.appliance_efficiency.setPlaceholderText('КПД прибора')
+        self.appliance_efficiency.setPlaceholderText('КПД прибора в %')
         self.appliance_model.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_number.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.appliance_power.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -327,30 +327,30 @@ class Window(QWidget): #Класс, объекты которого являют
         self.show_second(name=self.appliance_list.selectedItems()[0].text()) #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента appliance_list
 
     def show_second(self, name):
-        key = self.configurations_list.selectedItems()[0].text()                                                    #В перемнную key записывается первый выбранный элемент из configurations_list
-        self.appliance_type.clear()                                                                                 #Очистка appliance_type
-        self.appliance_number.clear()                                                                               #Очистка appliance_number
-        self.appliance_power.clear()                                                                                #Очистка appliance_power
-        self.appliance_time.clear()                                                                                 #Очистка appliance_time
-        self.appliance_efficiency.clear()                                                                           #Очистка appliance_efficiency
-        self.appliance_time_flag.setCurrentText('Секунды')                                                          #Установка выбранного значения appliance_time_flag на стандартное (секунды)
-        if appliance[name] != '':                                                                                   #Если у прибора с названием name есть какие-то специальнык свойства, т.е. если словарь appliance содержит хоть какие-то элементы:
-            for item in appliance[name]:                                                                            #Цикл, перебирающий данные из appliance[name]
-                self.appliance_type.addItem(str(item))                                                              #Добавление элемента item в appliance_type
-            self.appliance_type.activated[str].connect(self.appliance_type_function)                                #Подключение метода appliance_type_function к событию активации appliance_type
-        if data[key][name]['data'][0] != 0:                                                                         #Если какие-то данные для этого электроприбора уже были сохранены, т.е. если первый элемент списка под ключом data словаря под ключом name в словаре под ключом key в словаре data, являющийся количеством жлектроприборов, (т.е. обязательным элементом) не равен нулю (т.е. был сохранён):
-            #data showing                           
-            self.appliance_number.setText(str(data[key][name]['data'][0]))                                          #Установка в appliance_number сохранённого количества электроприборов для данного вида приборов, т.е. первого элемента списка под ключом data словаря под ключом name в словаре под ключом key в словаре data
-            self.appliance_power.setText(str(data[key][name]['data'][1]))                                           #Установка в appliance_power сохранённой мощности электроприборов для данного вида приборов,
-            self.appliance_time.setText(str(data[key][name]['data'][2]))                                            #Установка в appliance_time сохранённого времени работы  электроприборов для данного вида приборов,
-            self.appliance_efficiency.setText(str(data[key][name]['data'][3]))                                      #Установка в appliance_efficiency сохранённого КПД электроприборов для данного вида приборов,
-            self.appliance_model.setText(data[key][name]['data'][4])                                                #Установка в appliance_model сохранённой можели электроприборов для данного вида приборов,
-            self.appliance_type.setCurrentText(str(data[key][name]['data'][5][0]))                                  #Установка в appliance_type сохранённого типа (свойства) электроприборов для данного вида приборов,
-            #result showing                         
-            self.result_loss.setText('' + str(data[key][name]['result'][0]))                                        #Установка в result_loss сохранённых потерь электроэнергии электроприборов для данного вида приборов,
-            self.result_money.setText('' + str(data[key][name]['result'][1]))                                       #Установка в result_money сохранённоых потерь денег электроприборов для данного вида приборов,
-            self.result_all_loss.setText('Loss' + str(sum(data[key][key1]['result'][0] for key1 in data[key])))     #Установка в result_all_loss сохранённых потерь электроэнергии суммарно
-            self.result_all_money.setText('Money' + str(sum(data[key][key1]['result'][1] for key1 in data[key])))   #Установка в result_all_money сохранённых потерь денег суммарно
+        key = self.configurations_list.selectedItems()[0].text()                                                        #В перемнную key записывается первый выбранный элемент из configurations_list
+        self.appliance_type.clear()                                                                                     #Очистка appliance_type
+        self.appliance_number.clear()                                                                                   #Очистка appliance_number
+        self.appliance_power.clear()                                                                                    #Очистка appliance_power
+        self.appliance_time.clear()                                                                                     #Очистка appliance_time
+        self.appliance_efficiency.clear()                                                                               #Очистка appliance_efficiency
+        self.appliance_time_flag.setCurrentText('Секунды')                                                              #Установка выбранного значения appliance_time_flag на стандартное (секунды)
+        if appliance[name] != '':                                                                                       #Если у прибора с названием name есть какие-то специальнык свойства, т.е. если словарь appliance содержит хоть какие-то элементы:
+            for item in appliance[name]:                                                                                #Цикл, перебирающий данные из appliance[name]
+                self.appliance_type.addItem(str(item))                                                                  #Добавление элемента item в appliance_type
+            self.appliance_type.activated[str].connect(self.appliance_type_function)                                    #Подключение метода appliance_type_function к событию активации appliance_type
+        if data[key][name]['data'][0] != 0:                                                                             #Если какие-то данные для этого электроприбора уже были сохранены, т.е. если первый элемент списка под ключом data словаря под ключом name в словаре под ключом key в словаре data, являющийся количеством жлектроприборов, (т.е. обязательным элементом) не равен нулю (т.е. был сохранён):
+            #data showing                               
+            self.appliance_number.setText(str(data[key][name]['data'][0]))                                              #Установка в appliance_number сохранённого количества электроприборов для данного вида приборов, т.е. первого элемента списка под ключом data словаря под ключом name в словаре под ключом key в словаре data
+            self.appliance_power.setText(str(data[key][name]['data'][1]))                                               #Установка в appliance_power сохранённой мощности электроприборов для данного вида приборов,
+            self.appliance_time.setText(str(data[key][name]['data'][2]))                                                #Установка в appliance_time сохранённого времени работы  электроприборов для данного вида приборов,
+            self.appliance_efficiency.setText(str(data[key][name]['data'][3] * 100))                                    #Установка в appliance_efficiency сохранённого КПД электроприборов для данного вида приборов,
+            self.appliance_model.setText(data[key][name]['data'][4])                                                    #Установка в appliance_model сохранённой можели электроприборов для данного вида приборов,
+            self.appliance_type.setCurrentText(str(data[key][name]['data'][5][0]))                                      #Установка в appliance_type сохранённого типа (свойства) электроприборов для данного вида приборов,
+            #result showing                             
+            self.result_loss.setText('' + str(data[key][name]['result'][0]))                                            #Установка в result_loss сохранённых потерь электроэнергии электроприборов для данного вида приборов,
+            self.result_money.setText('' + str(data[key][name]['result'][1]))                                           #Установка в result_money сохранённоых потерь денег электроприборов для данного вида приборов,
+            self.result_all_loss.setText('Loss' + '\t' + str(sum(data[key][key1]['result'][0] for key1 in data[key])))  #Установка в result_all_loss сохранённых потерь электроэнергии суммарно
+            self.result_all_money.setText('Money' + '\t' + str(sum(data[key][key1]['result'][1] for key1 in data[key])))#Установка в result_all_money сохранённых потерь денег суммарно
 
 
     #Сонтроль конфигураций
@@ -414,14 +414,17 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Результат
-    def result(self, number, power, time, n=0, l=0):
+    def result(self, number, power, time, n=0, l=1):
         key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
+        type_of_appliance = data[key][key1]['data'][5][1]
+        if n == 0:
+            n = appliance[key1][type_of_appliance]
         if key[0] != 0:                                                                                                 #Если первый элемент key не равен нулю, т.е. был изменён пользователем:
-                self.result_logs.clear()                                                                                #Очистка result_logs
-                data[key][key1]['result'] = resulting(key1, power, time, number, n, l)                                  #Запись данных, полученных а результате вычислений в data (а точнее в список-форму под ключом result словаря под ключом key1 под ключом key словаря data)
-                for item in data[key]:                                                                                  #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
-                    self.result_logs.addItem(item)                                                                      ##Добавление элемента item в result_logs
-                self.writing()                                                                                          #Сохранение изменений
+            self.result_logs.clear()                                                                                    #Очистка result_logs
+            data[key][key1]['result'] = resulting(key1, power, time, number, n, l)                                      #Запись данных, полученных а результате вычислений в data (а точнее в список-форму под ключом result словаря под ключом key1 под ключом key словаря data)
+            for item in data[key]:                                                                                      #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
+                self.result_logs.addItem(item)                                                                          ##Добавление элемента item в result_logs
+            self.writing()                                                                                              #Сохранение изменений
 
 
     #Упрощающие жизнь методы
@@ -478,7 +481,7 @@ if __name__ == '__main__':                                  #Если данны
     except ImportError:                                     #Если произошла ошибка импортирования (ошибка подключения библиотеки):
         print('Файлы программы повреждены (module.py не найден). Обратитесь к разработчику.') #Вывод сообщения
 
-    #lang.choose_lang(0)                                     #TODO
+    #lang.choose_lang(0)                                    #TODO
     start()                                                 #TODO
 
     main = Window()                                         #Создание объекта main - экземпляра класса Window
