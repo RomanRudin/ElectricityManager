@@ -107,7 +107,7 @@ def start() -> None:
         pass                                                                                                                                                                        #
 
 #Функция, собирающая результаты вычислений других функций воедино
-def resulting(appliance_name:str, power:float, time:float, number:int, n:float, l:float) -> list:
+def resulting(appliance_name:str, power:float, time:float, number:int, n:float, l:float) -> list[float, float]:
     return [round(loss_counting(appliance_name, power, time, number, values['Money'], n, l), 2), round(money_counting(power, time, number, values['Money']), 2)]
 
 #Функция, вычисляющая 
