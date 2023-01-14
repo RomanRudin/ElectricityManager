@@ -291,21 +291,21 @@ class Window(QWidget): #Класс, объекты которого являют
     #TODO     return widget
 
     #Упрощающие жизнь методы
-    def writing(self):
+    def writing(self) -> None:
         with open('data.json', 'w', encoding='utf-8') as file:          #Открытие файла data.json для перезаписи в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
             json.dump(data, file, sort_keys=True, ensure_ascii=False)   #Запись данных из словаря data в file. Ключи сортируются, перевод символов в кодировку ASCII не производится
 
-    def message(self, message):
+    def message(self, message: str) -> None:
         self.information_logs.addItem(f"[{str(time.ctime(time.time()))}]:       {message}") #Добавление элемента с текстом сообщения и временем получения данного сообщения в information_logs
 
 
     #Контроль панели результатов
-    def show_results(self):
+    def show_results(self) -> None:
         self.layout_second.insertLayout(1, self.layout_result)              #Добавление layout_result в layout_second на первое место
         self.layout_second.insertLayout(3, self.layout_result_selected)     #Добавление layout_result_selected в layout_second на третее место
         self.show_second(name=self.result_logs.selectedItems()[0].text())   #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента result_logs
 
-    def hide_results(self):
+    def hide_results(self) -> None:
         if results_shown:                                                       #Если результаты уже были показаны:
             self.layout_second.removeItem(self.layout_result)                   #Удаление layout_result из layout_second
             self.layout_second.removeItem(self.layout_result_selected)          #Удаление layout_result_selected из layout_second
@@ -313,7 +313,7 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Контроль правого сектора приложения
-    def show_third(self):
+    def show_third(self) -> None:
         key = self.configurations_list.selectedItems()[0].text()    #В перемнную key записывается первый выбранный элемент из configurations_list
         self.appliance_list.clear()                                 #Очистка appliance_list
         self.appliance_list.addItems(data[key])                     #Добавление элементов из словаря, находящегося в словару data под ключом key в appliance_list
@@ -323,10 +323,10 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Контроль центрального сектора приложения
-    def show_second_list(self):
+    def show_second_list(self) -> None:
         self.show_second(name=self.appliance_list.selectedItems()[0].text()) #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента appliance_list
 
-    def show_second(self, name):
+    def show_second(self, name: str) -> None:
         key = self.configurations_list.selectedItems()[0].text()                                                        #В перемнную key записывается первый выбранный элемент из configurations_list
         self.appliance_type.clear()                                                                                     #Очистка appliance_type
         self.appliance_number.clear()                                                                                   #Очистка appliance_number
@@ -354,7 +354,7 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Сонтроль конфигураций
-    def create_configuration(self): #Добавление заметки
+    def create_configuration(self) -> None: #Добавление заметки
         configuration_name, ok = QInputDialog.getText(main, lang.add_cofiguration, lang.name_of_cofiguration)   #Создание диалогового окна
         if ok and configuration_name != '':                                                                     #Если пользователь нажал на кнопку ok и имя конфигурации заполнено:
             self.hide_results()                                                                                 #Вызов метода, скрывающего результаты предыдущих вычислений
@@ -364,7 +364,7 @@ class Window(QWidget): #Класс, объекты которого являют
         elif configuration_name == '':                                                                          #Если название конфигурации не было выбрано:
             self.message(lang.name_unspecified)                                                                 #Вывод сообщения "имя конфигурации не может быть пустым"
 
-    def delete_configuration(self): 
+    def delete_configuration(self) -> None: 
         if self.configurations_list.selectedItems():                        #Если какие-либо из элементов configurations_list были выделены:
             self.hide_results()                                             #Вызов метода, скрывающего результаты предыдущих вычислений
             data.pop(self.configurations_list.selectedItems()[0].text())    #Запись первого из выбранных элементов configurations_list в переменную key
@@ -377,7 +377,7 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Контроль приборов
-    def add_appliance(self, text):
+    def add_appliance(self, text:str) -> None:
         try:                                                                                                                                #Попробовать выполнить дальнейший код:
             if text != '':                                                                                                                  #Если text не является пустой строкой:
                 self.appliance_list.addItem(text)                                                                                           #Добавление в appliance_list элемента text
@@ -386,7 +386,7 @@ class Window(QWidget): #Класс, объекты которого являют
         except IndexError:                                                                                                                  #Если возникла ошибка превышения индекса списка:
             self.message(lang.configuration_unselected)                                                                                     #Вывод сообщения "Конфигурация не выбрана"
 
-    def save_appliance(self):
+    def save_appliance(self) -> None:
         if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                                    #Если какие-либо конфигурация и электроприбор выделены:
             if self.float_checking() and self.must_have_checker():                                                                              #Если данные из центрального сектора прошли проверку на тип и достаточность:
                 key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()                   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
@@ -401,7 +401,7 @@ class Window(QWidget): #Класс, объекты которого являют
         else:                                                                                                                                   #Иначе:
             self.message(lang.configuration_unselected_saving)                                                                                  #Вывод сообщения "Конфигурация или прибор не выбраны"
 
-    def delete_appliance(self):
+    def delete_appliance(self) -> None:
         if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                #Если какие-либо конфигурация и электроприбор выделены:
             self.hide_results()                                                                                             #Вызов метода, скрывающего результаты предыдущих вычислений
             key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
@@ -414,7 +414,7 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Результат
-    def result(self, number, power, time, n, l=1):
+    def result(self, number:int, power:float, time:float, n:float, l=1) -> None:
         key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
         if key[0] != 0:                                                                                                 #Если первый элемент key не равен нулю, т.е. был изменён пользователем:
             self.result_logs.clear()                                                                                    #Очистка result_logs
@@ -425,12 +425,12 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Упрощающие жизнь методы
-    def appliance_type_function(self):
+    def appliance_type_function(self) -> None:
         text = self.appliance_type.currentText()                                                              #Запись выбранного типа электроприбор в переменную text
         key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
         data[key][key1]['data'][5] = [str(text), appliance[self.appliance_list.selectedItems()[0].text()][text]]        #Запись текста свойства прибора и данных КПД из словаря appliance для этого свойства в data
 
-    def appliance_time_flag_function(self, text):
+    def appliance_time_flag_function(self, text:str) -> None:
         if text == 'Часы':                              #Если выбранный элемент appiance_time_flag - Часы
             self.d = 3600                               #Переменная d используется для перевода введённого пользователем времени в секунды
         elif text == 'Минуты':                          #Если выбранный элемент appiance_time_flag - Минуты
@@ -440,7 +440,7 @@ class Window(QWidget): #Класс, объекты которого являют
 
 
     #Проверяющие методы (Checkers)
-    def float_checking(self):
+    def float_checking(self) -> bool:
         checker = {'время работы': self.appliance_time.text(), 'мощность': self.appliance_power.text(),         #Перезапись введённых данных в словарь для большего удобство работы с ними в дальнейшем
             'количество': self.appliance_number.text(), 'КПД': self.appliance_efficiency.text()}                
         flag = True                                                                                             
@@ -460,7 +460,7 @@ class Window(QWidget): #Класс, объекты которого являют
                     flag = False                                                                                
         return flag                                                                                             #Метод при вызове вернёт значение переменной flag
 
-    def must_have_checker(self):
+    def must_have_checker(self) -> tuple(int, float, float):
         must_have = self.appliance_number.text(), self.appliance_power.text(), self.appliance_time.text()                           #Запись значений, введённых пользователем в указанные поля ввода в переменную-кортеж (tuple) must_have
         for data in must_have:                                                                                                      #Для каждого элемента в must_have:
             if data == '':                                                                                                          #Если этот элемент не был введён:
