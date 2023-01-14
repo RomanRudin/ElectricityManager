@@ -96,7 +96,7 @@ standart_values = {'P': {'Cu': {220: {0.50: 1300, 0.75: 2200, 1.00: 3100, 1.50: 
 values = []
 
 #
-def start():
+def start() -> None:
     try:
         with open('settings.txt', 'r', encoding='utf-8') as settings:                                                                                                               #Открытие файла settings.txt для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться settings
             global values                                                                                                                                                           #Далее будет исползоваться глобальная переменная values
@@ -107,17 +107,15 @@ def start():
         pass                                                                                                                                                                        #
 
 #Функция, собирающая результаты вычислений других функций воедино
-def resulting(appliance_name, power, time, number, n, l):
-    print(round(loss_counting(appliance_name, power, time, number, values['Money'], n, l), 2), round(money_counting(power, time, number, values['Money']), 2))
+def resulting(appliance_name:str, power:float, time:float, number:int, n:float, l:float) -> list:
     return [round(loss_counting(appliance_name, power, time, number, values['Money'], n, l), 2), round(money_counting(power, time, number, values['Money']), 2)]
 
 #Функция, вычисляющая 
-def loss_counting(appliance_name, power, time, number, money, n, l):
+def loss_counting(appliance_name:str, power:float, time:float, number:int, money:float, n:float, l:float) -> float:
     power_loss = (2 * (values['p'] ** 2) * values['ro'] * l) / ((values['U'] ** 2) * (values['S'] * 10 ** (-6)) * (fi[appliance_name] ** 2)) * time
     n_loss = (1 - n) * power * number * time
     return (power_loss + n_loss) * money
 
 #Функция, возвращающая потери в денежном эквиваленте
-def money_counting(power, time, number, money):
-    print(power, time, number, money)
+def money_counting(power:float, time:float, number:int, money:float) -> float:
     return (power * time * money * number)
