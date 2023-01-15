@@ -77,6 +77,7 @@ class Window(QWidget): #Класс, объекты которого являют
         #Выпадающее меню выбора свойств прибора
         self.appliance_type = QComboBox()
         self.appliance_type.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.appliance_type.setEnabled(False)
         #Поля ввода данных
         self.appliance_model = QLineEdit()
         self.appliance_number  = QLineEdit()
@@ -98,6 +99,12 @@ class Window(QWidget): #Класс, объекты которого являют
         self.appliance_power.setObjectName('appliance_args')
         self.appliance_time.setObjectName('appliance_args')
         self.appliance_efficiency.setObjectName('appliance_args')
+        #Удаление возможности редактирования полей до момента выбора конфигурации и бытового прибора
+        self.appliance_model.setEnabled(False)
+        self.appliance_number.setEnabled(False)
+        self.appliance_power.setEnabled(False)
+        self.appliance_time.setEnabled(False)
+        self.appliance_efficiency.setEnabled(False)
         #Надпись 'Выберите указанную единицу измерения *'
         appliance_time_label = QLabel('Выберите указанную единицу измерения *')
         appliance_time_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -108,6 +115,7 @@ class Window(QWidget): #Класс, объекты которого являют
         self.appliance_time_flag.addItem('Минуты')
         self.appliance_time_flag.addItem('Секунды')
         self.appliance_time_flag.activated[str].connect(self.appliance_time_flag_function) #Подключение метода appliance_time_flag_function для активированного appliance_time_flag
+        self.appliance_time_flag.setEnabled(False)
 
         #Кнопка сохранения 
         appliance_save = QPushButton('Сохранить')
@@ -329,11 +337,19 @@ class Window(QWidget): #Класс, объекты которого являют
     def show_second(self, name: str) -> None:
         key = self.configurations_list.selectedItems()[0].text()                                                        #В перемнную key записывается первый выбранный элемент из configurations_list
         self.appliance_type.clear()                                                                                     #Очистка appliance_type
+        self.appliance_type.setEnabled(True)                                                                            #Допуск пользователя к редактированию меню        
+        self.appliance_model.clear()                                                                                    #Очистка appliance_time
+        self.appliance_model.setEnabled(True)                                                                           #Допуск пользователя к редактированию поля
         self.appliance_number.clear()                                                                                   #Очистка appliance_number
+        self.appliance_number.setEnabled(True)                                                                          #Допуск пользователя к редактированию поля
         self.appliance_power.clear()                                                                                    #Очистка appliance_power
+        self.appliance_power.setEnabled(True)                                                                           #Допуск пользователя к редактированию поля
         self.appliance_time.clear()                                                                                     #Очистка appliance_time
+        self.appliance_time.setEnabled(True)                                                                            #Допуск пользователя к редактированию поля
         self.appliance_efficiency.clear()                                                                               #Очистка appliance_efficiency
-        self.appliance_time_flag.setCurrentText('Секунды')                                                              #Установка выбранного значения appliance_time_flag на стандартное (секунды)
+        self.appliance_efficiency.setEnabled(True)                                                                      #Допуск пользователя к редактированию поля
+        self.appliance_time_flag.setCurrentText('Секунды')                                                              #Установка выбранного значения appliance_time_flag на стандартное (секунды)                                                                         #Очистка appliance_efficiency
+        self.appliance_time_flag.setEnabled(True)                                                                       #Допуск пользователя к редактированию меню
         if appliance[name] != '':                                                                                       #Если у прибора с названием name есть какие-то специальнык свойства, т.е. если словарь appliance содержит хоть какие-то элементы:
             for item in appliance[name]:                                                                                #Цикл, перебирающий данные из appliance[name]
                 self.appliance_type.addItem(str(item))                                                                  #Добавление элемента item в appliance_type
@@ -397,6 +413,7 @@ class Window(QWidget): #Класс, объекты которого являют
                 else:                                                                                                                           #Иначе:
                     n = data[key][key1]['data'][5][1]                                                                                           #Запись стандартного для этого типа КПД
                 data[key][key1]['data'] = [int(number), float(power), float(time), n, self.appliance_model.text(), data[key][key1]['data'][5]]  #Запись введённых данных в созданную форму
+                self.appliance_efficiency.setText(str(n * 100))                                                                                 #Если КПД не было введено - будет выведено стандартное
                 self.result(number, power, time * self.d, n)                                                                                    #Вызов метода расчёта потерь с приведёнными данными
         else:                                                                                                                                   #Иначе:
             self.message(lang.configuration_unselected_saving)                                                                                  #Вывод сообщения "Конфигурация или прибор не выбраны"
