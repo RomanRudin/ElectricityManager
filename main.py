@@ -413,7 +413,7 @@ class Window(QWidget): #Класс, объекты которого являют
                 else:                                                                                                                           #Иначе:
                     n = data[key][key1]['data'][5][1]                                                                                           #Запись стандартного для этого типа КПД
                 data[key][key1]['data'] = [int(number), float(power), float(time), n, self.appliance_model.text(), data[key][key1]['data'][5]]  #Запись введённых данных в созданную форму
-                self.appliance_efficiency.setText(str(n * 100))                                                                                 #Если КПД не было введено - будет выведено стандартное
+                self.appliance_efficiency.setText(str(n * 100))                                                                                       #Если КПД не было введено - будет выведено стандартное
                 self.result(number, power, time * self.d, n)                                                                                    #Вызов метода расчёта потерь с приведёнными данными
         else:                                                                                                                                   #Иначе:
             self.message(lang.configuration_unselected_saving)                                                                                  #Вывод сообщения "Конфигурация или прибор не выбраны"
