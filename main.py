@@ -460,7 +460,7 @@ class Window(QWidget): #Класс, объекты которого являют
                     flag = False                                                                                
         return flag                                                                                             #Метод при вызове вернёт значение переменной flag
 
-    def must_have_checker(self) -> tuple(int, float, float):
+    def must_have_checker(self) -> tuple:
         must_have = self.appliance_number.text(), self.appliance_power.text(), self.appliance_time.text()                           #Запись значений, введённых пользователем в указанные поля ввода в переменную-кортеж (tuple) must_have
         for data in must_have:                                                                                                      #Для каждого элемента в must_have:
             if data == '':                                                                                                          #Если этот элемент не был введён:
