@@ -493,26 +493,28 @@ if __name__ == '__main__':                                  #Если данны
 
     try:                                                    #Попробовать выполнить код:
         from module import resulting, appliance, start      #Из библиотеки module импортировать resulting, start, appliance
+
+        #lang.choose_lang(0)                                    #TODO
+        start()                                                 #TODO
+
+        main = Window()                                         #Создание объекта main - экземпляра класса Window
+        main.setWindowTitle('')                                 #Установка названия приложения
+        main.resize(1900, 1080)                                 #Установка разрешения 1900 на 1080
+
+
+        main.message('Старт программы')                         #Вывод сообщения "Старт программы"
+
+
+        with open('data.json', 'r', encoding='utf-8') as file:  #Открытие файла data.json для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
+            data = json.load(file)                              #Запись данных из file в словарь data 
+        main.configurations_list.addItems(data)                 #Добавление элементов из data в configurations_list
+        with open('main.qss', 'r') as file:                     #Открытие файла main.qss для чтения. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file. #?В данном фалйе содержится инструкции оформления приложения в формате qss (аналог css для Qt)
+            app.setStyleSheet(file.read())                      #Установка заданного дизайна
+
+        main.show()                                             #Запуск приложения
+
+        exit(app.exec_())                                       #При попытке закрыть программу завершить её действие
     except ImportError:                                     #Если произошла ошибка импортирования (ошибка подключения библиотеки):
         print('Файлы программы повреждены (module.py не найден). Обратитесь к разработчику.') #Вывод сообщения
-
-    #lang.choose_lang(0)                                    #TODO
-    start()                                                 #TODO
-
-    main = Window()                                         #Создание объекта main - экземпляра класса Window
-    main.setWindowTitle('')                                 #Установка названия приложения
-    main.resize(1900, 1080)                                 #Установка разрешения 1900 на 1080
-
-
-    main.message('Старт программы')                         #Вывод сообщения "Старт программы"
-
-
-    with open('data.json', 'r', encoding='utf-8') as file:  #Открытие файла data.json для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
-        data = json.load(file)                              #Запись данных из file в словарь data 
-    main.configurations_list.addItems(data)                 #Добавление элементов из data в configurations_list
-    with open('main.qss', 'r') as file:                     #Открытие файла main.qss для чтения. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file. #?В данном фалйе содержится инструкции оформления приложения в формате qss (аналог css для Qt)
-        app.setStyleSheet(file.read())                      #Установка заданного дизайна
-
-    main.show()                                             #Запуск приложения
-                                    
-    exit(app.exec_())                                       #При попытке закрыть программу завершить её действие
+    except FileNotFoundError:                                     #Если произошла ошибка импортирования (ошибка подключения библиотеки):
+        print('Файлы программы повреждены. Обратитесь к разработчику.') #Вывод сообщения
