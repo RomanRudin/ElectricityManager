@@ -298,223 +298,369 @@ class Window(QWidget): #Класс, объекты которого являют
     #TODO     widget.setObjectName(kwargs['text'])
     #TODO     return widget
 
-    #Упрощающие жизнь методы
+    #?Упрощающие жизнь методы
     def writing(self) -> None:
-        with open('data.json', 'w', encoding='utf-8') as file:          #Открытие файла data.json для перезаписи в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
-            dump(data, file, sort_keys=True, ensure_ascii=False, indent=4)        #Запись данных из словаря data в file. Ключи сортируются, перевод символов в кодировку ASCII не производится
+        #Открытие файла data.json для перезаписи в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
+        with open('data.json', 'w', encoding='utf-8') as file:          
+            #Запись данных из словаря data в file. Ключи сортируются, перевод символов в кодировку ASCII не производится
+            dump(data, file, sort_keys=True, ensure_ascii=False, indent=4)   
 
     def message(self, message: str) -> None:
-        self.information_logs.addItem(f"[{str(time.ctime(time.time()))}]:       {message}") #Добавление элемента с текстом сообщения и временем получения данного сообщения в information_logs
+        #Добавление элемента с текстом сообщения и временем получения данного сообщения в information_logs
+        self.information_logs.addItem(f"[{str(time.ctime(time.time()))}]:       {message}") 
 
 
-    #Контроль панели результатов
+    #?Контроль панели результатов
     def show_results(self) -> None:
-        self.layout_second.insertLayout(1, self.layout_result)              #Добавление layout_result в layout_second на первое место
-        self.layout_second.insertLayout(3, self.layout_result_selected)     #Добавление layout_result_selected в layout_second на третее место
-        self.show_second(name=self.result_logs.selectedItems()[0].text())   #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента result_logs
+        #Добавление layout_result в layout_second на первое место
+        self.layout_second.insertLayout(1, self.layout_result)              
+        #Добавление layout_result_selected в layout_second на третее место
+        self.layout_second.insertLayout(3, self.layout_result_selected)     
+        #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента result_logs
+        self.show_second(name=self.result_logs.selectedItems()[0].text())   
 
     def hide_results(self) -> None:
-        if results_shown:                                                       #Если результаты уже были показаны:
-            self.layout_second.removeItem(self.layout_result)                   #Удаление layout_result из layout_second
-            self.layout_second.removeItem(self.layout_result_selected)          #Удаление layout_result_selected из layout_second
-            self.show_second(name=self.result_logs.selectedItems()[0].text())   #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента result_logs
+        #Если результаты уже были показаны:
+        if results_shown:                                    
+            #Удаление layout_result из layout_second                  
+            self.layout_second.removeItem(self.layout_result)                   
+            #Удаление layout_result_selected из layout_second
+            self.layout_second.removeItem(self.layout_result_selected)          
+            #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента result_logs
+            self.show_second(name=self.result_logs.selectedItems()[0].text())   
 
 
-    #Контроль правого сектора приложения
+    #?Контроль правого сектора приложения
     def show_third(self) -> None:
-        key = self.configurations_list.selectedItems()[0].text()    #В перемнную key записывается первый выбранный элемент из configurations_list
-        self.appliance_list.clear()                                 #Очистка appliance_list
-        self.appliance_list.addItems(data[key])                     #Добавление элементов из словаря, находящегося в словару data под ключом key в appliance_list
-        self.result_logs.clear()                                    #Очистка result_logs
-        for item in data[key]:                                      #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
-            self.result_logs.addItem(item)                          #Добавление элемента item в result_logs
+        #В перемнную key записывается первый выбранный элемент из configurations_list
+        key = self.configurations_list.selectedItems()[0].text()    
+        #Очистка appliance_list
+        self.appliance_list.clear()                                 
+        #Добавление элементов из словаря, находящегося в словару data под ключом key в appliance_list
+        self.appliance_list.addItems(data[key])                     
+        #Очистка result_logs
+        self.result_logs.clear()                                    
+        #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
+        for item in data[key]:                               
+            #Добавление элемента item в result_logs       
+            self.result_logs.addItem(item)                          
 
 
-    #Контроль центрального сектора приложения
+    #?Контроль центрального сектора приложения
     def show_second_list(self) -> None:
-        self.show_second(name=self.appliance_list.selectedItems()[0].text()) #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента appliance_list
+        #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента appliance_list
+        self.show_second(name=self.appliance_list.selectedItems()[0].text()) 
 
     def show_second(self, name: str) -> None:
-        key = self.configurations_list.selectedItems()[0].text()                                                        #В перемнную key записывается первый выбранный элемент из configurations_list
-        self.appliance_type.clear()                                                                                     #Очистка appliance_type
-        self.appliance_type.setEnabled(True)                                                                            #Допуск пользователя к редактированию меню        
-        self.appliance_model.clear()                                                                                    #Очистка appliance_time
-        self.appliance_model.setEnabled(True)                                                                           #Допуск пользователя к редактированию поля
-        self.appliance_number.clear()                                                                                   #Очистка appliance_number
-        self.appliance_number.setEnabled(True)                                                                          #Допуск пользователя к редактированию поля
-        self.appliance_power.clear()                                                                                    #Очистка appliance_power
-        self.appliance_power.setEnabled(True)                                                                           #Допуск пользователя к редактированию поля
-        self.appliance_time.clear()                                                                                     #Очистка appliance_time
-        self.appliance_time.setEnabled(True)                                                                            #Допуск пользователя к редактированию поля
-        self.appliance_efficiency.clear()                                                                               #Очистка appliance_efficiency
-        self.appliance_efficiency.setEnabled(True)                                                                      #Допуск пользователя к редактированию поля
-        self.appliance_time_flag.setCurrentText('Секунды')                                                              #Установка выбранного значения appliance_time_flag на стандартное (секунды)                                                                         #Очистка appliance_efficiency
-        self.appliance_time_flag.setEnabled(True)                                                                       #Допуск пользователя к редактированию меню
-        if appliance[name] != '':                                                                                       #Если у прибора с названием name есть какие-то специальнык свойства, т.е. если словарь appliance содержит хоть какие-то элементы:
-            for item in appliance[name]:                                                                                #Цикл, перебирающий данные из appliance[name]
-                self.appliance_type.addItem(str(item))                                                                  #Добавление элемента item в appliance_type
-            self.appliance_type.activated[str].connect(self.appliance_type_function)                                    #Подключение метода appliance_type_function к событию активации appliance_type
-        if data[key][name]['data'][0] != 0:                                                                             #Если какие-то данные для этого электроприбора уже были сохранены, т.е. если первый элемент списка под ключом data словаря под ключом name в словаре под ключом key в словаре data, являющийся количеством жлектроприборов, (т.е. обязательным элементом) не равен нулю (т.е. был сохранён):
-            #data showing                               
-            self.appliance_number.setText(str(data[key][name]['data'][0]))                                              #Установка в appliance_number сохранённого количества электроприборов для данного вида приборов, т.е. первого элемента списка под ключом data словаря под ключом name в словаре под ключом key в словаре data
-            self.appliance_power.setText(str(data[key][name]['data'][1]))                                               #Установка в appliance_power сохранённой мощности электроприборов для данного вида приборов,
-            self.appliance_time.setText(str(data[key][name]['data'][2]))                                                #Установка в appliance_time сохранённого времени работы  электроприборов для данного вида приборов,
-            self.appliance_efficiency.setText(str(data[key][name]['data'][3] * 100))                                    #Установка в appliance_efficiency сохранённого КПД электроприборов для данного вида приборов,
-            self.appliance_model.setText(data[key][name]['data'][4])                                                    #Установка в appliance_model сохранённой можели электроприборов для данного вида приборов,
-            self.appliance_type.setCurrentText(str(data[key][name]['data'][5][0]))                                      #Установка в appliance_type сохранённого типа (свойства) электроприборов для данного вида приборов,
-            #result showing                             
-            self.result_loss.setText('' + str(data[key][name]['result'][0]))                                            #Установка в result_loss сохранённых потерь электроэнергии электроприборов для данного вида приборов,
-            self.result_money.setText('' + str(data[key][name]['result'][1]))                                           #Установка в result_money сохранённоых потерь денег электроприборов для данного вида приборов,
-            self.result_all_loss.setText('Loss' + '\t' + str(sum(data[key][key1]['result'][0] for key1 in data[key])))  #Установка в result_all_loss сохранённых потерь электроэнергии суммарно
-            self.result_all_money.setText('Money' + '\t' + str(sum(data[key][key1]['result'][1] for key1 in data[key])))#Установка в result_all_money сохранённых потерь денег суммарно
+        #В перемнную key записывается первый выбранный элемент из configurations_list
+        key = self.configurations_list.selectedItems()[0].text()                                             
+        #Очистка appliance_type           
+        self.appliance_type.clear()                                                                                     
+        #Допуск пользователя к редактированию меню 
+        self.appliance_type.setEnabled(True)                                                                            
+        #Очистка appliance_time       
+        self.appliance_model.clear()                                                                                    
+        #Допуск пользователя к редактированию поля
+        self.appliance_model.setEnabled(True)                                                                          
+        #Очистка appliance_number 
+        self.appliance_number.clear()                                                                                  
+        #Допуск пользователя к редактированию поля
+        self.appliance_number.setEnabled(True)                                                                          
+        #Очистка appliance_power
+        self.appliance_power.clear()                                                                                    
+        #Допуск пользователя к редактированию поля
+        self.appliance_power.setEnabled(True)                                                                           
+         #Очистка appliance_time
+        self.appliance_time.clear()                                                                                    
+        #Допуск пользователя к редактированию поля
+        self.appliance_time.setEnabled(True)                                                                            
+        #Очистка appliance_efficiency
+        self.appliance_efficiency.clear()                                                                               
+        #Допуск пользователя к редактированию поля
+        self.appliance_efficiency.setEnabled(True)             
+         #Установка выбранного значения appliance_time_flag на стандартное (секунды)                                                                       
+        self.appliance_time_flag.setCurrentText('Секунды')                                       
+        #Допуск пользователя к редактированию меню                                                                                 
+        self.appliance_time_flag.setEnabled(True)                                                                       
+        #Если у прибора с названием name есть какие-то специальнык свойства, т.е. если словарь appliance содержит хоть какие-то элементы:
+        if appliance[name] != '':                                                                                       
+            #Цикл, перебирающий данные из appliance[name]
+            for item in appliance[name]:                                                                          
+                #Добавление элемента item в appliance_type      
+                self.appliance_type.addItem(str(item))                                                                 
+            #Подключение метода appliance_type_function к событию активации appliance_type 
+            self.appliance_type.activated[str].connect(self.appliance_type_function)                                    
+        #Если какие-то данные для этого электроприбора уже были сохранены, т.е. если первый элемент списка под ключом data словаря под ключом name в словаре под ключом key в словаре data, являющийся количеством жлектроприборов, (т.е. обязательным элементом) не равен нулю (т.е. был сохранён):
+        if data[key][name]['data'][0] != 0:                                                                             
+            #?data showing         
+            #Установка в appliance_number сохранённого количества электроприборов для данного вида приборов, т.е. первого элемента списка под ключом data словаря под ключом name в словаре под ключом key в словаре data                      
+            self.appliance_number.setText(str(data[key][name]['data'][0]))                                
+            #Установка в appliance_power сохранённой мощности электроприборов для данного вида приборов,              
+            self.appliance_power.setText(str(data[key][name]['data'][1]))             
+            #Установка в appliance_time сохранённого времени работы  электроприборов для данного вида приборов,                                  
+            self.appliance_time.setText(str(data[key][name]['data'][2]))                                                
+            #Установка в appliance_efficiency сохранённого КПД электроприборов для данного вида приборов,
+            self.appliance_efficiency.setText(str(data[key][name]['data'][3] * 100))                                    
+            #Установка в appliance_model сохранённой можели электроприборов для данного вида приборов,
+            self.appliance_model.setText(data[key][name]['data'][4])                                                    
+            #Установка в appliance_type сохранённого типа (свойства) электроприборов для данного вида приборов,
+            self.appliance_type.setCurrentText(str(data[key][name]['data'][5][0]))                                      
+            #?result showing                             
+            #Установка в result_loss сохранённых потерь электроэнергии электроприборов для данного вида приборов,
+            self.result_loss.setText('' + str(data[key][name]['result'][0]))                                            
+            #Установка в result_money сохранённоых потерь денег электроприборов для данного вида приборов,
+            self.result_money.setText('' + str(data[key][name]['result'][1]))                                           
+            #Установка в result_all_loss сохранённых потерь электроэнергии суммарно
+            self.result_all_loss.setText('Loss' + '\t' + str(sum(data[key][key1]['result'][0] for key1 in data[key])))  
+            #Установка в result_all_money сохранённых потерь денег суммарно
+            self.result_all_money.setText('Money' + '\t' + str(sum(data[key][key1]['result'][1] for key1 in data[key])))
 
 
-    #Сонтроль конфигураций
-    def create_configuration(self) -> None: #Добавление заметки
-        configuration_name, ok = QInputDialog.getText(main, lang.add_cofiguration, lang.name_of_cofiguration)   #Создание диалогового окна
-        if ok and configuration_name != '':                                                                     #Если пользователь нажал на кнопку ok и имя конфигурации заполнено:
-            self.hide_results()                                                                                 #Вызов метода, скрывающего результаты предыдущих вычислений
-            data.update({configuration_name: {}})                                                               #Добавление в словарь data пары значение-ключ configuration_name: {}
-            self.configurations_list.addItem(configuration_name)                                                #Добавление элемента configuration_name в виджет configurations_list
-            self.writing()                                                                                      #Сохранение изменений
-        elif configuration_name == '':                                                                          #Если название конфигурации не было выбрано:
-            self.message(lang.name_unspecified)                                                                 #Вывод сообщения "имя конфигурации не может быть пустым"
+    #?Сонтроль конфигураций
+    def create_configuration(self) -> None: 
+        #Создание диалогового окна
+        configuration_name, ok = QInputDialog.getText(main, lang.add_cofiguration, lang.name_of_cofiguration)   
+        #Если пользователь нажал на кнопку ok и имя конфигурации заполнено:
+        if ok and configuration_name != '':                                                                     
+            #Вызов метода, скрывающего результаты предыдущих вычислений
+            self.hide_results()                                                                                 
+            #Добавление в словарь data пары значение-ключ configuration_name: {}
+            data.update({configuration_name: {}})                                                               
+            #Добавление элемента configuration_name в виджет configurations_list
+            self.configurations_list.addItem(configuration_name)                                                
+            #Сохранение изменений
+            self.writing()                                                                                      
+        #Если название конфигурации не было выбрано:
+        elif configuration_name == '':                                                                          
+            #Вывод сообщения "имя конфигурации не может быть пустым"
+            self.message(lang.name_unspecified)                                                                 
 
     def delete_configuration(self) -> None: 
-        if self.configurations_list.selectedItems():                        #Если какие-либо из элементов configurations_list были выделены:
-            self.hide_results()                                             #Вызов метода, скрывающего результаты предыдущих вычислений
-            data.pop(self.configurations_list.selectedItems()[0].text())    #Запись первого из выбранных элементов configurations_list в переменную key
-            self.configurations_list.clear()                                #Очистка configurations_list
-            self.appliance_list.clear()                                     #Очистка appliance_list
-            self.configurations_list.addItems(data)                         #Добавление элементов из data в configurations_list
-            self.writing()                                                  #Сохранение изменений
-        else:                                                               #Иначе:
-            self.message(lang.configuration_unselected_deleting)            #Вывод сообщения "конфигурация для удаления не выбрана"
+        #Если какие-либо из элементов configurations_list были выделены:
+        if self.configurations_list.selectedItems():                        
+            #Вызов метода, скрывающего результаты предыдущих вычислений
+            self.hide_results()                                             
+            #Запись первого из выбранных элементов configurations_list в переменную key
+            data.pop(self.configurations_list.selectedItems()[0].text())   
+            #Очистка configurations_list 
+            self.configurations_list.clear()                               
+            #Очистка appliance_list
+            self.appliance_list.clear()                                     
+            #Добавление элементов из data в configurations_list
+            self.configurations_list.addItems(data)                         
+            #Сохранение изменений
+            self.writing()                                                  
+        #Иначе:
+        else:                                                               
+            #Вывод сообщения "конфигурация для удаления не выбрана"
+            self.message(lang.configuration_unselected_deleting)            
 
 
-    #Контроль приборов
+    #?Контроль приборов
     def add_appliance(self, text:str) -> None:
-        try:                                                                                                                                #Попробовать выполнить дальнейший код:
-            if text != '':                                                                                                                  #Если text не является пустой строкой:
-                self.appliance_list.addItem(text)                                                                                           #Добавление в appliance_list элемента text
-                data[self.configurations_list.selectedItems()[0].text()][str(text)] = {'data': [0, 0, 0, 0, '', ['', 0]], 'result': [0, 0]} #Создание новой пустой формы для типа электроприборов
-                self.writing()                                                                                                              #Сохранение изменений
-        except IndexError:                                                                                                                  #Если возникла ошибка превышения индекса списка:
-            self.message(lang.configuration_unselected)                                                                                     #Вывод сообщения "Конфигурация не выбрана"
+        #Попробовать выполнить дальнейший код:
+        try:                                                                                                                                
+            #Если text не является пустой строкой:
+            if text != '':                                                                                                                  
+                #Добавление в appliance_list элемента text
+                self.appliance_list.addItem(text)                                                                                           
+                #Создание новой пустой формы для типа электроприборов
+                data[self.configurations_list.selectedItems()[0].text()][str(text)] = {'data': [0, 0, 0, 0, '', ['', 0]], 'result': [0, 0]} 
+                #Сохранение изменений
+                self.writing()                                                                                                              
+        #Если возникла ошибка превышения индекса списка:
+        except IndexError:                                                                                                                  
+            #Вывод сообщения "Конфигурация не выбрана"
+            self.message(lang.configuration_unselected)                                                                                     
 
     def save_appliance(self) -> None:
-        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                                    #Если какие-либо конфигурация и электроприбор выделены:
-            if self.float_checking() and self.must_have_checker():                                                                              #Если данные из центрального сектора прошли проверку на тип и достаточность:
-                key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()                   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
-                number, power, time = self.must_have_checker()                                                                                  #Запись преобразованных в тип float и возвращённых методом must_have_checker данных
-                self.appliance_type_function()                                                                                                  #Вызов функции сохранения типа электроприбора
-                if self.appliance_efficiency.text() != '':                                                                                      #Если поле КПД заполнено:
-                    n = float(self.appliance_efficiency.text()) / 100                                                                           #Запись преобразованного в тип float КПД
-                else:                                                                                                                           #Иначе:
-                    n = data[key][key1]['data'][5][1]                                                                                           #Запись стандартного для этого типа КПД
-                data[key][key1]['data'] = [int(number), float(power), float(time), n, self.appliance_model.text(), data[key][key1]['data'][5]]  #Запись введённых данных в созданную форму
-                self.appliance_efficiency.setText(str(n * 100))                                                                                       #Если КПД не было введено - будет выведено стандартное
-                self.result(number, power, time * self.d, n)                                                                                    #Вызов метода расчёта потерь с приведёнными данными
-        else:                                                                                                                                   #Иначе:
-            self.message(lang.configuration_unselected_saving)                                                                                  #Вывод сообщения "Конфигурация или прибор не выбраны"
+        #Если какие-либо конфигурация и электроприбор выделены:
+        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                                    
+            #Если данные из центрального сектора прошли проверку на тип и достаточность:
+            if self.float_checking() and self.must_have_checker():                                                                              
+                #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
+                key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()                   
+                #Запись преобразованных в тип float и возвращённых методом must_have_checker данных
+                number, power, time = self.must_have_checker()                                                                                  
+                #Вызов функции сохранения типа электроприбора
+                self.appliance_type_function()                                                                                                 
+                #Если поле КПД заполнено: 
+                if self.appliance_efficiency.text() != '':                                                                                     
+                    #Запись преобразованного в тип float КПД
+                    n = float(self.appliance_efficiency.text()) / 100                                                                           
+                #Иначе:
+                else:                                                                                                                           
+                    #Запись стандартного для этого типа КПД
+                    n = data[key][key1]['data'][5][1]                                                                                           
+                #Запись введённых данных в созданную форму
+                data[key][key1]['data'] = [int(number), float(power), float(time), n, self.appliance_model.text(), data[key][key1]['data'][5]]  
+                #Если КПД не было введено - будет выведено стандартное
+                self.appliance_efficiency.setText(str(n * 100))                                                                                 
+                #Вызов метода расчёта потерь с приведёнными данными      
+                self.result(number, power, time * self.d, n)                                                                                    
+        #Иначе:
+        else:                                                                                                                                   
+            #Вывод сообщения "Конфигурация или прибор не выбраны"
+            self.message(lang.configuration_unselected_saving)                                                                                  
 
     def delete_appliance(self) -> None:
-        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                #Если какие-либо конфигурация и электроприбор выделены:
-            self.hide_results()                                                                                             #Вызов метода, скрывающего результаты предыдущих вычислений
-            key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
-            data[key].pop([key1])                                                                                           #Удаление элемента key1 из словаря под ключом key словаря data
-            self.appliance_list.clear()                                                                                     #Очистка appliance_list
-            self.appliance_list.addItems(data[key])                                                                         #Добавление элементов из словаря под ключом key словаря data в appliance_list
-            self.writing()                                                                                                  #Сохранение изменений
-        else:                                                                                                               #Иначе:
-            self.message(lang.device_unselected)                                                                            #Вывод сообщения "Прибор не выбран"
+        #Если какие-либо конфигурация и электроприбор выделены:
+        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():                                
+            #Вызов метода, скрывающего результаты предыдущих вычислений
+            self.hide_results()                                                                                             
+            #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
+            key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   
+            #Удаление элемента key1 из словаря под ключом key словаря data
+            data[key].pop([key1])                                                                                           
+            #Очистка appliance_list
+            self.appliance_list.clear()                                                                                     
+            #Добавление элементов из словаря под ключом key словаря data в appliance_list
+            self.appliance_list.addItems(data[key])                                                                         
+            #Сохранение изменений
+            self.writing()                                                                                                  
+        #Иначе:
+        else:                                                                                                               
+            #Вывод сообщения "Прибор не выбран"
+            self.message(lang.device_unselected)                                                                            
 
 
-    #Результат
+    #?Результат
     def result(self, number:int, power:float, time:float, n:float, l=1) -> None:
-        key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
-        if key[0] != 0:                                                                                                 #Если первый элемент key не равен нулю, т.е. был изменён пользователем:
-            self.result_logs.clear()                                                                                    #Очистка result_logs
-            data[key][key1]['result'] = resulting(key1, power, time, number, n, l)                                      #Запись данных, полученных а результате вычислений в data (а точнее в список-форму под ключом result словаря под ключом key1 под ключом key словаря data)
-            for item in data[key]:                                                                                      #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
-                self.result_logs.addItem(item)                                                                          ##Добавление элемента item в result_logs
-            self.writing()                                                                                              #Сохранение изменений
+        #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
+        key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   
+        #Если первый элемент key не равен нулю, т.е. был изменён пользователем:
+        if key[0] != 0:                                                                                                 
+            #Очистка result_logs
+            self.result_logs.clear()                                                                                    
+            #Запись данных, полученных а результате вычислений в data (а точнее в список-форму под ключом result словаря под ключом key1 под ключом key словаря data)
+            data[key][key1]['result'] = resulting(key1, power, time, number, n, l)                                      
+            #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
+            for item in data[key]:                                                                                      
+                ##Добавление элемента item в result_logs
+                self.result_logs.addItem(item)                                                                          
+            #Сохранение изменений
+            self.writing()                                                                                              
 
 
-    #Упрощающие жизнь методы
+    #?Методы работы с QComboBox
     def appliance_type_function(self) -> None:
-        text = self.appliance_type.currentText()                                                              #Запись выбранного типа электроприбор в переменную text
-        key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
-        data[key][key1]['data'][5] = [str(text), appliance[self.appliance_list.selectedItems()[0].text()][text]]        #Запись текста свойства прибора и данных КПД из словаря appliance для этого свойства в data
+        #Запись выбранного типа электроприбор в переменную text
+        text = self.appliance_type.currentText()                                                              
+        #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
+        key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   
+        #Запись текста свойства прибора и данных КПД из словаря appliance для этого свойства в data
+        data[key][key1]['data'][5] = [str(text), appliance[self.appliance_list.selectedItems()[0].text()][text]]        
 
     def appliance_time_flag_function(self, text:str) -> None:
-        if text == 'Часы':                              #Если выбранный элемент appiance_time_flag - Часы
-            self.d = 3600                               #Переменная d используется для перевода введённого пользователем времени в секунды
-        elif text == 'Минуты':                          #Если выбранный элемент appiance_time_flag - Минуты
-            self.d = 60                                      
-        else:                                           #Иначе
+        #Переменная d используется для перевода введённого пользователем времени в секунды
+        #Если выбранный элемент appiance_time_flag - Часы
+        if text == 'Часы':
+            self.d = 3600                               
+        #Если выбранный элемент appiance_time_flag - Минуты
+        elif text == 'Минуты':                          
+            self.d = 60                                 
+        #Иначе     
+        else:                                           
             self.d = 1
 
 
-    #Проверяющие методы (Checkers)
+    #?Проверяющие методы (Методы контроля вводимых данных) (Checkers)
     def float_checking(self) -> bool:
-        checker = {'время работы': self.appliance_time.text(), 'мощность': self.appliance_power.text(),         #Перезапись введённых данных в словарь для большего удобство работы с ними в дальнейшем
+        #Перезапись введённых данных в словарь для большего удобство работы с ними в дальнейшем
+        checker = {'время работы': self.appliance_time.text(), 'мощность': self.appliance_power.text(),         
             'количество': self.appliance_number.text(), 'КПД': self.appliance_efficiency.text()}                
         flag = True                                                                                             
-        for key in checker:                                                                                     #Для каждого из элементов checker:
+        #Для каждого из элементов checker:
+        for key in checker:                                                                                     
             data = checker[key]                                                                                 
-            if data != '':                                                                                      #Если перебираемые данные всё же были введены
-                try:                                                                                            #Попробовать выполнить дальнейший код:
-                    if key == 'количество':                                                                     #Если итерируемые сейчас данные - это количество электроприборов:
+            #Если перебираемые данные всё же были введены
+            if data != '':                                                                                      
+                #Попробовать выполнить дальнейший код:
+                try:                                                                                            
+                    #Если итерируемые сейчас данные - это количество электроприборов:
+                    if key == 'количество':                                                                     
                         data = int(data)                                                                        
-                    else:                                                                                       #Иначе:
+                    #Иначе:
+                    else:                                                                                       
                         data = float(data)                                                                      
-                except ValueError:                                                                              #Если возникла ошибка перевода значения из одного типа в другой (например, если количество приборов - не целое число или при его наборе пользователь использовал буквы):
-                    if key == 'количество':                                                                     #Если ошибка возникла при попытке перевода количества в целочисленнок значение:
-                        self.message(lang.parameter + str(key) + lang.must_be_an_integer)                       #Вывод сообщения "Количество приборов должно быть целым числом"
-                    else:                                                                                       #Иначе:
-                        self.message((key) + 'должен содеражть число с плавающей точкой (",") или целое число') #Вывод сообщения "... должен содеражть число с плавающей точкой (",") или целое число'"
+                #Если возникла ошибка перевода значения из одного типа в другой (например, если количество приборов - не целое число или при его наборе пользователь использовал буквы):
+                except ValueError:                                                                              
+                    #Если ошибка возникла при попытке перевода количества в целочисленнок значение:
+                    if key == 'количество':                                                                     
+                        #Вывод сообщения "Количество приборов должно быть целым числом"
+                        self.message(lang.parameter + str(key) + lang.must_be_an_integer)                       
+                    #Иначе:
+                    else:                                                                                       
+                        #Вывод сообщения "... должен содеражть число с плавающей точкой (",") или целое число'"
+                        self.message((key) + 'должен содеражть число с плавающей точкой (",") или целое число') 
                     flag = False                                                                                
-        return flag                                                                                             #Метод при вызове вернёт значение переменной flag
+        #Метод при вызове вернёт значение переменной flag
+        return flag                                                                                             
 
     def must_have_checker(self) -> tuple:
-        must_have = self.appliance_number.text(), self.appliance_power.text(), self.appliance_time.text()                           #Запись значений, введённых пользователем в указанные поля ввода в переменную-кортеж (tuple) must_have
-        for data in must_have:                                                                                                      #Для каждого элемента в must_have:
-            if data == '':                                                                                                          #Если этот элемент не был введён:
-                self.message(f'Параметр {data} обязателен для заполнения!')                                                         #Вывод сообщения "Параметр ... обязателен для заполнения!"
-                return False                                                                                                        #В этом случае метод вернёт значение False
-        return int(self.appliance_number.text()), float(self.appliance_power.text()), float(self.appliance_time.text()) * self.d    #Так как return прерывает дальнейшее выполнение метода, то если все обязательные данные введены, метод вернёт преобразованные значения
+        #Запись значений, введённых пользователем в указанные поля ввода в переменную-кортеж (tuple) must_have
+        must_have = self.appliance_number.text(), self.appliance_power.text(), self.appliance_time.text()                           
+        #Для каждого элемента в must_have:
+        for data in must_have:                                                                                                      
+            #Если этот элемент не был введён:
+            if data == '':                                                                                                          
+                #Вывод сообщения "Параметр ... обязателен для заполнения!"
+                self.message(f'Параметр {data} обязателен для заполнения!')                                                         
+                #В этом случае метод вернёт значение False
+                return False                                                                                                        
+        #Так как return прерывает дальнейшее выполнение метода, то если все обязательные данные введены, метод вернёт преобразованные значения
+        return int(self.appliance_number.text()), float(self.appliance_power.text()), float(self.appliance_time.text()) * self.d    
 
 
 
+#Если данный файл является главным (а не дополнительной библиотекой):
+if __name__ == '__main__':                                                                      
+    #Создание объекта app - экземпляра класса управления логикой графики компьютера QApplication
+    app = QApplication([argv])                                                                  
 
-if __name__ == '__main__':                                                                      #Если данный файл является главным (а не дополнительной библиотекой):
-    app = QApplication([argv])                                                                  #Создание объекта app - экземпляра класса управления логикой графики компьютера QApplication
-
-    try:                                                                                        #Попробовать выполнить код:
-        from module import resulting, appliance, start                                          #Из библиотеки module импортировать resulting, start, appliance
+    #Попробовать выполнить код:
+    try:                                                                                        
+        #Из библиотеки module импортировать resulting, start, appliance
+        from module import resulting, appliance, start                                          
 
         #lang.choose_lang(0)                                                                    #TODO
         start()                                                                                 #TODO
 
-        main = Window()                                                                         #Создание объекта main - экземпляра класса Window
-        main.setWindowTitle('')                                                                 #Установка названия приложения
-        main.resize(1900, 1080)                                                                 #Установка разрешения 1900 на 1080
+        #Создание объекта main - экземпляра класса Window
+        main = Window()                                                                         
+        #Установка названия приложения
+        main.setWindowTitle('')                                                                 
+        #Установка разрешения 1900 на 1080
+        main.resize(1900, 1080)                                                                 
 
 
-        main.message('Старт программы')                                                         #Вывод сообщения "Старт программы"
+        #Вывод сообщения "Старт программы"
+        main.message('Старт программы')                                                         
 
 
-        with open(r'data\user_data\configs\data.json', 'r', encoding='utf-8') as file:          #Открытие файла data.json для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
-            data = load(file)                                                                   #Запись данных из file в словарь data 
-        main.configurations_list.addItems(data)                                                 #Добавление элементов из data в configurations_list
-        with open(r'design\main.qss', 'r') as file:                                             #Открытие файла main.qss для чтения. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file. #?В данном фалйе содержится инструкции оформления приложения в формате qss (аналог css для Qt)
-            app.setStyleSheet(file.read())                                                      #Установка заданного дизайна
+        #Открытие файла data.json для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
+        with open(r'data\user_data\configs\data.json', 'r', encoding='utf-8') as file:          
+            #Запись данных из file в словарь data 
+            data = load(file)                                                                   
+        #Добавление элементов из data в configurations_list
+        main.configurations_list.addItems(data)                                                 
+        #Открытие файла main.qss для чтения. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file. 
+        #?В данном файле содержится инструкции оформления приложения в формате qss (аналог css для Qt)
+        with open(r'design\main.qss', 'r') as file:                                             
+            #Установка заданного дизайна
+            app.setStyleSheet(file.read())                                                      
 
-        main.show()                                                                             #Запуск приложения
+        #Запуск приложения
+        main.show()                                                                             
 
-        exit(app.exec_())                                                                       #При попытке закрыть программу завершить её действие
-    except ImportError:                                                                         #Если произошла ошибка импортирования (ошибка подключения библиотеки):
-        print('Файлы программы повреждены (module.py не найден). Обратитесь к разработчику.')   #Вывод сообщения
-    except FileNotFoundError:                                                                   #Если произошла ошибка импортирования (ошибка подключения библиотеки):
-        print('Файлы программы повреждены. Обратитесь к разработчику.')                         #Вывод сообщения
+        #При попытке закрыть программу завершить её действие
+        exit(app.exec_())                                              
+
+    #Если произошла ошибка импортирования (ошибка подключения библиотеки):
+    except ImportError:                                                                        
+        #Вывод сообщения 
+        print('Файлы программы повреждены (module.py не найден). Обратитесь к разработчику.')  
+    #Если произошла ошибка импортирования (ошибка подключения библиотеки):
+    except FileNotFoundError:                                                                   
+        #Вывод сообщения
+        print('Файлы программы повреждены. Обратитесь к разработчику.')                         
