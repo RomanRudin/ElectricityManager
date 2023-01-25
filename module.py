@@ -21,7 +21,6 @@ def start() -> None:
         with open(r"data\user_data\settings.txt", 'r', encoding='utf-8') as settings:                                                                                                               #Открытие файла settings.txt для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться settings
             global values                                                                                                                                                           #Далее будет исползоваться глобальная переменная values
             Material, U, S = settings.readline()[:2], settings.readline()[:3], settings.readline()[:4]                                                                              #Парсинг данных из фалйа в переменные
-            print(standart_values['P'][Material][U][S])
             values = {'p': standart_values['P'][Material][U][S], 'U': int(U), 'S': float(S), 'ro': standart_values['ro'][Material], 'Money': float(S) / (3600 * 1000)}              #
             #Мне необходимы действия / 1_000 * 3600, так как параметр "money" считается по киловатт-часам          
     except FileNotFoundError:                                                                                                                                                       #
