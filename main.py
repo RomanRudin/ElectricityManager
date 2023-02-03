@@ -27,7 +27,6 @@ class Window(QWidget): #Класс, объекты которого являют
         '''
 
 
-        #Левая часть приложения. Отвечает за создание, выбор и удаление конфигураций.
         #Надпись 'Выберите конфигурацию из уже существующих или добавьте новую:'
         configurations_list_label = QLabel('Выберите конфигурацию из уже существующих или добавьте новую:')
         configurations_list_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -42,7 +41,6 @@ class Window(QWidget): #Класс, объекты которого являют
         configurations_delete.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         configurations_create.setObjectName('configurations_buttons')
         configurations_delete.setObjectName('configurations_buttons')
-
 
         #Центральная часть приложения. Отвечает за редактирование параметров прибора, показ сообщений о работе приложения, результаты работы программы.
         #Надпись "Результаты вычислений:"
@@ -301,7 +299,7 @@ class Window(QWidget): #Класс, объекты которого являют
     #?Упрощающие жизнь методы
     def writing(self) -> None:
         #Открытие файла data.json для перезаписи в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
-        with open('data.json', 'w', encoding='utf-8') as file:          
+        with open(r'data\user_data\config\data.json', 'w', encoding='utf-8') as file:          
             #Запись данных из словаря data в file. Ключи сортируются, перевод символов в кодировку ASCII не производится
             dump(data, file, sort_keys=True, ensure_ascii=False, indent=4)   
 
@@ -343,7 +341,7 @@ class Window(QWidget): #Класс, объекты которого являют
         #Цикл перебирает элементы из словаря, находящегося в словару data под ключом key в appliance_list, называя при каждой итерации соответсвующую информацию из data[key] item
         for item in data[key]:                               
             #Добавление элемента item в result_logs       
-            self.result_logs.addItem(item)                          
+            self.result_logs.addItem(item)
 
 
     #?Контроль центрального сектора приложения
@@ -472,6 +470,7 @@ class Window(QWidget): #Класс, объекты которого являют
         except IndexError:                                                                                                                  
             #Вывод сообщения "Конфигурация не выбрана"
             self.message(lang.configuration_unselected)                                                                                     
+
 
     def save_appliance(self) -> None:
         #Если какие-либо конфигурация и электроприбор выделены:
@@ -621,7 +620,7 @@ if __name__ == '__main__':
     #Попробовать выполнить код:
     try:                                                                                        
         #Из библиотеки module импортировать resulting, start, appliance
-        from module import resulting, appliance, start                                          
+        from module import resulting, appliance, start                            
 
         #lang.choose_lang(0)                                                                    #TODO
         start()                                                                                 #TODO
