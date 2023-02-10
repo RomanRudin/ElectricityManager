@@ -26,8 +26,15 @@ class Window(QWidget): #Класс, объекты которого являют
         object.setObjectName('object_name') - переименовывание объекта внутри системы. Позволяет использовать отдельные элементы QSS для отдельных виджетов.
         '''
 
+        self.mode = False
+        self.wiring_length = []
 
         #Левая часть приложения. Отвечает за создание, выбор и удаление конфигураций.
+        #
+        self.mode_changer = QPushButton('Смена режима')
+        self.mode_changer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.mode_changer.setEnabled(False)
+
         #Надпись 'Выберите конфигурацию из уже существующих или добавьте новую:'
         configurations_list_label = QLabel('Выберите конфигурацию из уже существующих или добавьте новую:')
         configurations_list_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -42,6 +49,17 @@ class Window(QWidget): #Класс, объекты которого являют
         configurations_delete.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         configurations_create.setObjectName('configurations_buttons')
         configurations_delete.setObjectName('configurations_buttons')
+
+
+        #
+        wires_app_information_label = QLabel('Тип бытового прибора')
+        wires_app_information_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        wires_time_information_label = QLabel('Длина проводки до него (в метрах)')
+        wires_time_information_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        #
+        wiring_save = QPushButton('Сохранить')
+        wiring_save.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        wiring_save.setObjectName('appliance_save')
 
 
         #Центральная часть приложения. Отвечает за редактирование параметров прибора, показ сообщений о работе приложения, результаты работы программы.
@@ -163,7 +181,9 @@ class Window(QWidget): #Класс, объекты которого являют
         layout_third = QVBoxLayout()                #Layout правого сектора 
         layout_c_buttons = QHBoxLayout()            #Layout кнопок управления конфигурациями
         layout_a_buttons = QVBoxLayout()            #Layout кнопок управления приборами
-        layout_device = QVBoxLayout()               #Layout редактирования приборов
+        self.layout_device = QVBoxLayout()          #Layout редактирования приборов
+        self.layout_wires = QVBoxLayout()           #Layout редактирования проводки
+        layout_labels_wires = QHBoxLayout()     #
         self.layout_result = QVBoxLayout()          #Динамический layout  #? dynamic layout 
         self.layout_result_selected = QHBoxLayout() #Динамический layout  #? dynamic layout
 
@@ -180,24 +200,35 @@ class Window(QWidget): #Класс, объекты которого являют
         layout_c_buttons.addWidget(configurations_delete)
 
         #Добавление виджетов в layout_device
-        layout_device.addWidget(appliance_information_label, stretch=1)
-        layout_device.addWidget(appliance_type_label, stretch=1)
-        layout_device.addWidget(self.appliance_type, stretch=1)
-        layout_device.addWidget(self.appliance_model, stretch=1)
-        layout_device.addWidget(self.appliance_number, stretch=1)
-        layout_device.addWidget(self.appliance_power, stretch=1)
-        layout_device.addWidget(self.appliance_time, stretch=1)
-        layout_device.addWidget(appliance_time_label, stretch=1)
-        layout_device.addWidget(self.appliance_time_flag, stretch=1)
-        layout_device.addWidget(self.appliance_efficiency, stretch=1)
-        layout_device.addWidget(appliance_save, stretch=1)
+        self.layout_device.addWidget(appliance_information_label, stretch=1)
+        self.layout_device.addWidget(appliance_type_label, stretch=1)
+        self.layout_device.addWidget(self.appliance_type, stretch=1)
+        self.layout_device.addWidget(self.appliance_model, stretch=1)
+        self.layout_device.addWidget(self.appliance_number, stretch=1)
+        self.layout_device.addWidget(self.appliance_power, stretch=1)
+        self.layout_device.addWidget(self.appliance_time, stretch=1)
+        self.layout_device.addWidget(appliance_time_label, stretch=1)
+        self.layout_device.addWidget(self.appliance_time_flag, stretch=1)
+        self.layout_device.addWidget(self.appliance_efficiency, stretch=1)
+        self.layout_device.addWidget(appliance_save, stretch=1)
+
+        
+        #
+        layout_labels_wires.addWidget(wires_app_information_label, stretch=5)
+        layout_labels_wires.addWidget(wires_time_information_label, stretch=2)
+
+
+        #
+        self.layout_wires.addLayout(layout_labels_wires)
+
 
         #Добавление виджетов в layout_a_buttons
         layout_a_buttons.addWidget(appliance_delete)
         layout_a_buttons.addWidget(appliance_add_box)
 
         #Добавление виджетов и layout-ов в layout_first
-        layout_first.addWidget(configurations_list_label, stretch=2) #изменить
+        layout_first.addWidget(self.mode_changer, stretch=1)
+        layout_first.addWidget(configurations_list_label, stretch=2) #TODOизменить
         layout_first.addWidget(self.configurations_list, stretch=64)
         layout_first.addLayout(layout_c_buttons, stretch=5)
         
@@ -205,7 +236,7 @@ class Window(QWidget): #Класс, объекты которого являют
         self.layout_second.addWidget(result_label, stretch=2)
         self.layout_second.addWidget(self.result_logs, stretch=2)
         self.layout_second.addWidget(spacer, stretch=2)
-        self.layout_second.addLayout(layout_device, stretch=8)
+        self.layout_second.addLayout(self.layout_device, stretch=8) #TODO #?
         self.layout_second.addWidget(self.information_logs, stretch=4)
 
         #Добавление виджетов и layout-ов в layout_third
@@ -219,6 +250,7 @@ class Window(QWidget): #Класс, объекты которого являют
         main_layout.addLayout(layout_third, stretch=3)
 
         #Обработка событий, т.е. подключение методов из аргументов connect() к активированным виджетам
+        self.mode_changer.clicked.connect(self.add_wires)
         self.configurations_list.itemClicked.connect(self.show_third)
         configurations_create.clicked.connect(self.create_configuration)
         configurations_delete.clicked.connect(self.delete_configuration)
@@ -226,6 +258,7 @@ class Window(QWidget): #Класс, объекты которого являют
         self.result_logs.itemClicked.connect(self.show_results)
         appliance_delete.clicked.connect(self.delete_appliance)
         appliance_save.clicked.connect(self.save_appliance)
+        wiring_save.clicked.connect(self.save_wiring)
 
         #Установка главного layout-а
         self.setLayout(main_layout)
@@ -301,7 +334,7 @@ class Window(QWidget): #Класс, объекты которого являют
     #?Упрощающие жизнь методы
     def writing(self) -> None:
         #Открытие файла data.json для перезаписи в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
-        with open('data.json', 'w', encoding='utf-8') as file:          
+        with open(r'data\user_data\config\data.json', 'w', encoding='utf-8') as file:          
             #Запись данных из словаря data в file. Ключи сортируются, перевод символов в кодировку ASCII не производится
             dump(data, file, sort_keys=True, ensure_ascii=False, indent=4)   
 
@@ -344,12 +377,26 @@ class Window(QWidget): #Класс, объекты которого являют
         for item in data[key]:                               
             #Добавление элемента item в result_logs       
             self.result_logs.addItem(item)                          
+        boolean =  'Провода' in data[key].keys()
+        self.mode = boolean
+        self.mode_changer.setEnabled(not boolean)
+
 
 
     #?Контроль центрального сектора приложения
     def show_second_list(self) -> None:
         #Вызов метода show_second с аргументом name равным тексту первого выбранного элемента appliance_list
-        self.show_second(name=self.appliance_list.selectedItems()[0].text()) 
+        name = self.appliance_list.selectedItems()[0].text()
+        if name != 'Провода':
+            if self.layout_second.itemAt(3).layout() != self.layout_device:
+                self.layout_second.removeItem(self.layout_second.itemAt(3))
+                self.layout_second.insertLayout(3, self.layout_device, 8)
+            self.show_second(name=self.appliance_list.selectedItems()[0].text()) 
+        else:
+            if self.layout_second.itemAt(3).layout() == self.layout_device:
+                self.layout_second.removeItem(self.layout_second.itemAt(3))
+                self.layout_second.insertLayout(3, self.layout_wires, 8)
+            self.show_wires()
 
     def show_second(self, name: str) -> None:
         #В перемнную key записывается первый выбранный элемент из configurations_list
@@ -467,11 +514,14 @@ class Window(QWidget): #Класс, объекты которого являют
                 #Создание новой пустой формы для типа электроприборов
                 data[self.configurations_list.selectedItems()[0].text()][str(text)] = {'data': [0, 0, 0, 0, '', ['', 0]], 'result': [0, 0]} 
                 #Сохранение изменений
+                if self.mode:
+                    data[self.configurations_list.selectedItems()[0].text()]['Провода'][str(text)] = 0
                 self.writing()                                                                                                              
         #Если возникла ошибка превышения индекса списка:
         except IndexError:                                                                                                                  
             #Вывод сообщения "Конфигурация не выбрана"
             self.message(lang.configuration_unselected)                                                                                     
+
 
     def save_appliance(self) -> None:
         #Если какие-либо конфигурация и электроприбор выделены:
@@ -510,6 +560,11 @@ class Window(QWidget): #Класс, объекты которого являют
             self.hide_results()                                                                                             
             #Запись первого элемента выбранных конфигурации и типа электроприбора в переменные key и key1 соответственно
             key, key1 = self.configurations_list.selectedItems()[0].text(), self.appliance_list.selectedItems()[0].text()   
+            if self.mode:
+                if key1 == 'Провода':
+                    self.mode = False
+                else:
+                    data[key]['Провода'].pop([key1])    
             #Удаление элемента key1 из словаря под ключом key словаря data
             data[key].pop([key1])                                                                                           
             #Очистка appliance_list
@@ -612,6 +667,57 @@ class Window(QWidget): #Класс, объекты которого являют
         return int(self.appliance_number.text()), float(self.appliance_power.text()), float(self.appliance_time.text()) * self.d    
 
 
+    #?
+    def add_wires(self):
+        if not self.mode:
+            self.mode = True
+            key = self.configurations_list.selectedItems()[0].text()
+            data[key]['Провода'].update([(x, 0) for x in data[key].keys()])
+
+    def construct_wires(self):
+        for i in reversed(range(1, self.layout_wires.count() - 1)):
+            self.layout_wires.takeAt(i)
+        self.wiring_length.clear()
+        for app, length in data[self.configurations_list.selectedItems()[0].text()]['Провода'].items():
+            layout_w = QHBoxLayout()
+            app_name = QLabel(app)
+            app_name.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            app_name.setObjectName('app_name')
+            app_length = QLineEdit()
+            app_length.setText(length)
+            app_length.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            app_length.setObjectName('app_length')
+            self.wiring_length.append(app_length)
+            layout_w.addWidget(app_length, stretch=2)
+            layout_w.addWidget(app_name, stretch=5)
+            self.layout_wires.addLayout(layout_w)
+
+
+    def save_wiring(self):
+        if self.configurations_list.selectedItems() and self.appliance_list.selectedItems():        
+            key = self.configurations_list.selectedItems()                                            
+            #Если данные из центрального сектора прошли проверку на тип и достаточность:
+            if self.float_checking_wiring():
+                for index, app in enumerate(list(data[key]['Провода'].keys())):
+                    data[key]['Провода'][app] = float(self.wiring_length[index].text())
+        #Иначе:
+        else:                                                                                                                                   
+            #Вывод сообщения "Конфигурация или прибор не выбраны"
+            self.message(lang.configuration_unselected_saving)         
+
+    def float_checking_wiring(self):
+        #Перезапись введённых данных в словарь для большего удобство работы с ними в дальнейшем       
+        flag = True                            
+        for key, data in data[self.configurations_list.selectedItems()[0].text()]['Провода'].items():
+            try:                                                                             
+                data = float(data)                                                                      
+            #Если возникла ошибка перевода значения из одного типа в другой (например, если количество приборов - не целое число или при его наборе пользователь использовал буквы):
+            except ValueError:                                                                              
+                self.message(f'{key} должен содеражть число с плавающей точкой (",") или целое число') 
+                flag = False                                                                                
+        #Метод при вызове вернёт значение переменной flag
+        return flag    
+    
 
 #Если данный файл является главным (а не дополнительной библиотекой):
 if __name__ == '__main__':                                                                      
@@ -621,7 +727,7 @@ if __name__ == '__main__':
     #Попробовать выполнить код:
     try:                                                                                        
         #Из библиотеки module импортировать resulting, start, appliance
-        from module import resulting, appliance, start                                          
+        from module import resulting, appliance, start                            
 
         #lang.choose_lang(0)                                                                    #TODO
         start()                                                                                 #TODO
