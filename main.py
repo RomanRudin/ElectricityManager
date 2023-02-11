@@ -628,7 +628,7 @@ if __name__ == '__main__':
         #Создание объекта main - экземпляра класса Window
         main = Window()                                                                         
         #Установка названия приложения
-        main.setWindowTitle('')                                                                 
+        main.setWindowTitle('ElectricityManager')                                                                 
         #Установка разрешения 1900 на 1080
         main.resize(1900, 1080)                                                                 
 
