@@ -405,13 +405,13 @@ class Window(QWidget): #Класс, объекты которого являют
             self.appliance_type.setCurrentText(str(data[key][name]['data'][5][0]))                                      
             #?result showing                             
             #Установка в result_loss сохранённых потерь электроэнергии электроприборов для данного вида приборов,
-            self.result_loss.setText('' + str(data[key][name]['result'][0]))                                            
+            self.result_loss.setText('Потери для электроприбора:' + str(data[key][name]['result'][0]))                                            
             #Установка в result_money сохранённоых потерь денег электроприборов для данного вида приборов,
-            self.result_money.setText('' + str(data[key][name]['result'][1]))                                           
+            self.result_money.setText('Затраты на электроприбор:' + str(data[key][name]['result'][1]))                                           
             #Установка в result_all_loss сохранённых потерь электроэнергии суммарно
-            self.result_all_loss.setText('Loss' + '\t' + str(sum(data[key][key1]['result'][0] for key1 in data[key])))  
+            self.result_all_loss.setText('Потери всего:' + '\t' + str(sum(data[key][key1]['result'][0] for key1 in data[key])))  
             #Установка в result_all_money сохранённых потерь денег суммарно
-            self.result_all_money.setText('Money' + '\t' + str(sum(data[key][key1]['result'][1] for key1 in data[key])))
+            self.result_all_money.setText('Затраты всего:' + '\t' + str(sum(data[key][key1]['result'][1] for key1 in data[key])))
 
 
     #?Сонтроль конфигураций
