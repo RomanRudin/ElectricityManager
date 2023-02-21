@@ -638,7 +638,7 @@ if __name__ == '__main__':
 
 
         #Открытие файла data.json для чтения в кодировке utf-8. Теперь к этому файлу в пределах действия ключевого слова with можно обращаться file
-        with open(r'data\user_data\configs\data.json', 'r', encoding='utf-8') as file:          
+        with open(r'data\user_data\config\data.json', 'r', encoding='utf-8') as file:          
             #Запись данных из file в словарь data 
             data = load(file)                                                                   
         #Добавление элементов из data в configurations_list
