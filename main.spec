@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['C:\\PythonFiles\\ElectricityManager\\Lib\\site_packages'],
+    pathex=[],
     binaries=[],
     datas=[],
     hiddenimports=[],
