@@ -448,7 +448,7 @@ class Window(QWidget): #Класс, объекты которого являют
             self.configurations_list.addItems(data)                         
             #Сохранение изменений
             self.writing()                                                  
-        #Иначе:
+        #Иначе::
         else:                                                               
             #Вывод сообщения "конфигурация для удаления не выбрана"
             self.message(lang.configuration_unselected_deleting)            
